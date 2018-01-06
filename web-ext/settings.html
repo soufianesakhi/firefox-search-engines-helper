@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<style>
+		form>div {
+			margin: 1%;
+		}
+	</style>
+</head>
+
+<body>
+	<fieldset>
+		<legend>Add a new search engine</legend>
+		<form>
+			<div>
+				<label>Search URL: "%s" is substituted with the search terms</label>
+				<input id="AddEngineSearchURL" type="text" style="width: 300px">
+			</div>
+			<div>
+				<label>Search name</label>
+				<input id="AddEngineName" type="text" style="width: 100px">
+			</div>
+			<div>
+				<label>Icon URL: Link or base64 (starting with data:image)</label>
+				<input id="AddEngineIconURL" type="text" style="width: 300px">
+				<div id="EngineIcon"></div>
+			</div>
+
+			<div>
+				<input type="button" id="addSearchEngine" value="Add search engine">
+			</div>
+		</form>
+	</fieldset>
+	<fieldset>
+		<legend>Export all search engines</legend>
+		<div>
+			Due to Firefox limitations, the "search.json.mozlz4" file must be manually selected from the profile folder:
+			<a href="http://kb.mozillazine.org/Profile_folder_-_Firefox">How to locate the profile folder</a>.
+			<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
+		</div>
+	</fieldset>
+
+	<script src="settings.js"></script>
+	<script src="jquery.min.js"></script>
+</body>
+
+</html>

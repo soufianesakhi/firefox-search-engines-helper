@@ -1,0 +1,24 @@
+{
+	"manifest_version": 2,
+	"name": "Search Engines Helper",
+	"version": "1.0.0",
+	"description": "Add custom search engines",
+	"icons": {
+		"128": "icons/128.png"
+	},
+	"options_ui": {
+		"browser_style": true,
+		"page": "settings.html"
+	},
+	"web_accessible_resources": [
+		"search-template.xml"
+	],
+	"permissions": [
+		"https://uguu.se/*"
+	],
+	"applications": {
+		"gecko": {
+			"strict_min_version": "57.0"
+		}
+	}
+}

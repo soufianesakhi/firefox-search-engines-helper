@@ -1,0 +1,12 @@
+{
+  "name": "firefox-search-engines-helper",
+  "version": "1",
+  "description": "Add custom firefox search engines",
+  "author": "Soufiane Sakhi",
+  "license": "MIT",
+  "dependencies": {
+    "@types/firefox-webext-browser": "^58.0.1",
+    "@types/jquery": "^3.2.17",
+    "@types/text-encoding": "0.0.32"
+  }
+}
