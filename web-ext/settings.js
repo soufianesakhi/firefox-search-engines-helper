@@ -247,6 +247,30 @@ function addSearchEngine() {
 		.replace("{SearchURL}", htmlEscape(searchURL))
 		.replace("{ImageURL}", htmlEscape(imageURL));
 
+	postFileIO(newSearchEngineXML);
+}
+
+function postFileIO(newSearchEngineXML) {
+	var data = new FormData();
+	data.append("file", new File([newSearchEngineXML], "search.xml"));
+	$.ajax({
+		url: "https://file.io/?expires=1",
+		method: "POST",
+		data: data,
+		contentType: false,
+		processData: false,
+		success: (result) => {
+			if (result.success) {
+				postSuccess(result.link);
+			} else {
+				alert("Error while preparing the search engine's xml definition: " + JSON.stringify(result));
+			}
+		},
+		error: ajaxErrorCallback
+	});
+}
+
+function postUguuSE(newSearchEngineXML) {
 	var data = new FormData();
 	data.append("randomname", "xml");
 	data.append("file", new File([newSearchEngineXML], "search.xml"));
@@ -256,15 +280,17 @@ function addSearchEngine() {
 		data: data,
 		contentType: false,
 		processData: false,
-		success: (url) => {
-			addSearchProvider(url);
-			engineNameInput.val("");
-			searchURLInput.val("");
-			iconURLInput.val("");
-			engineIconDiv.empty();
-		},
+		success: postSuccess,
 		error: ajaxErrorCallback
 	});
+}
+
+function postSuccess(xmlUrl) {
+	addSearchProvider(xmlUrl);
+	engineNameInput.val("");
+	searchURLInput.val("");
+	iconURLInput.val("");
+	engineIconDiv.empty();
 }
 
 function addSearchProvider(url) {
