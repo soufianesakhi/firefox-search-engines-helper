@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Search Engines Helper",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Add custom search engines",
 	"icons": {
 		"128": "icons/128.png"
@@ -14,7 +14,7 @@
 		"search-template.xml"
 	],
 	"permissions": [
-		"https://uguu.se/*"
+		"https://file.io/*"
 	],
 	"applications": {
 		"gecko": {

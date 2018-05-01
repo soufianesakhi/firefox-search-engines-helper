@@ -13,7 +13,7 @@ When the inputs are ready, press the "Add search engine" button.
 
 A confirmation window will be displayed to add the search engine.
 
-(Due to technical limitations, no API is available to directly add a search engine from an extension starting with Firefox 57, that's why the website uguu.se is used to temporarily host the open search xml that will be used by Firefox to add the engine.)
+(Due to technical limitations, no API is available to directly add a search engine from an extension starting with Firefox 57, that's why the website file.io is used to temporarily host the open search xml that will be used by Firefox to add the engine.)
 
 ![add-search-engine-confirmation](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine-confirmation.PNG)
 
