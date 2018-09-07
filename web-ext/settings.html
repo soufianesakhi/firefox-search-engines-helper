@@ -4,8 +4,9 @@
 <head>
 	<meta charset="utf-8">
 	<style>
-		form>div {
-			margin: 1%;
+		form input {
+			display: block;
+			margin-bottom: 1%;
 		}
 		input {
 			font-size:12px;
@@ -19,18 +20,19 @@
 		<form>
 			<div>
 				<label>Search URL: "%s" is substituted with the search terms</label>
-				<input id="AddEngineSearchURL" type="text" style="width: 300px">
+				<input id="AddEngineSearchURL" type="text" style="width: 100%">
 			</div>
 			<div>
 				<label>Search name</label>
-				<input id="AddEngineName" type="text" style="width: 100px">
+				<input id="AddEngineName" type="text" style="width: 40%">
 			</div>
 			<div>
 				<label>Icon URL: Link or base64 (starting with data:image)</label>
-				<input id="AddEngineIconURL" type="text" style="width: 300px">
-				<div id="EngineIcon"></div>
+				<input id="AddEngineIconURL" type="text" style="width: 100%">
 			</div>
-
+			<div id="EngineIcon">
+				<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" />
+			</div>
 			<div>
 				<input type="button" id="addSearchEngine" value="Add search engine">
 			</div>
@@ -38,27 +40,21 @@
 	</fieldset>
 	<fieldset>
 		<legend>Export all search engines to json file</legend>
-		<ul>
-			<div>
-				search.json.mozlz4 file (*):
-				<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
-			</div>
-		</ul>
+		<div>
+			search.json.mozlz4 file (*):
+			<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
+		</div>
 	</fieldset>
 	<fieldset>
 		<legend>Import search engines from json file</legend>
-		<ul>
-			<div>
-				Exported json file:
-				<input id="importJsonInput" type="file" accept=".json" />
-			</div>
-		</ul>
-		<ul>
-			<div>
-				search.json.mozlz4 file (*) (in order to import only added engines):
-				<input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
-			</div>
-		</ul>
+		<div>
+			Exported json file:
+			<input id="importJsonInput" type="file" accept=".json" />
+		</div>
+		<div>
+			search.json.mozlz4 file (*) (in order to import only added engines):
+			<input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
+		</div>
 		<div>
 			<input id="importEngines" type="button" value="Import" />
 		</div>
