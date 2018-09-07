@@ -7,6 +7,9 @@
 		form>div {
 			margin: 1%;
 		}
+		input {
+			font-size:12px;
+		}
 	</style>
 </head>
 
@@ -34,13 +37,35 @@
 		</form>
 	</fieldset>
 	<fieldset>
-		<legend>Export all search engines</legend>
+		<legend>Export all search engines to json file</legend>
+		<ul>
+			<div>
+				(*) search.json.mozlz4 file:
+				<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
+			</div>
+		</ul>
+	</fieldset>
+	<fieldset>
+		<legend>Import search engines from json file</legend>
+		<ul>
+			<div>
+				Exported json file:
+				<input id="importJsonInput" type="file" accept=".json" />
+			</div>
+		</ul>
+		<ul>
+			<div>
+				(*) search.json.mozlz4 file (in order to import only added engines):
+				<input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
+			</div>
+		</ul>
 		<div>
-			Due to Firefox limitations, the "search.json.mozlz4" file must be manually selected from the profile folder:
-			<a href="http://kb.mozillazine.org/Profile_folder_-_Firefox">How to locate the profile folder</a>.
-			<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
+			<input id="importEngines" type="button" value="Import" />
 		</div>
 	</fieldset>
+	<span>(*) Due to Firefox limitations, the "search.json.mozlz4" file must be manually selected from the profile
+		folder
+		<a href="http://kb.mozillazine.org/Profile_folder_-_Firefox">How to locate the profile folder</a></span>
 
 	<script src="settings.js"></script>
 	<script src="jquery.min.js"></script>

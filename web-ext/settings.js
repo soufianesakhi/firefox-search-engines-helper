@@ -89,6 +89,7 @@ function readMozlz4File(file, onRead, onError) {
 	let reader = new FileReader();
 
 	reader.onload = function () {
+		// @ts-ignore
 		let input = new Uint8Array(reader.result);
 		let output;
 		let uncompressedSize = input.length * 3;	// size estimate for uncompressed data!
@@ -148,7 +149,7 @@ function main() {
 	engineNameInput = $("#AddEngineName");
 	iconURLInput = $("#AddEngineIconURL");
 	engineIconDiv = $("#EngineIcon");
-	$("#addSearchEngine").click(addSearchEngine);
+	$("#addSearchEngine").click(submitSearchEngine);
 
 	$("#exportBrowserEngine").change((ev) => {
 		let file = ev.target['files'][0];
@@ -217,7 +218,20 @@ function refreshEngineIcon() {
 	engineIconDiv.empty().append(img);
 }
 
-function addSearchEngine() {
+function submitSearchEngine() {
+	let engineName = engineNameInput.val().toString().trim();
+	let searchURL = searchURLInput.val().toString().trim();
+	let imageURL = iconURLInput.val().toString().trim();
+	let invalid = engineName.length == 0 || searchURL.length == 0 || imageURL.length == 0;
+	invalid = invalid || searchURL.indexOf(searchTermsParam) == -1;
+	if (invalid) {
+		console.log("Error validating the inputs: '" + engineName + "', '" + searchURL + "', '" + imageURL + "'");
+		return;
+	}
+	addSearchEngine(searchURL, engineName, imageURL);
+}
+
+function addSearchEngine(searchURL, engineName, imageURL) {
 	if (!xmlTemplate) {
 		$.ajax({
 			url: browser.extension.getURL("search-template.xml"),
@@ -229,17 +243,6 @@ function addSearchEngine() {
 			error: ajaxErrorCallback
 		});
 	}
-
-	let engineName = engineNameInput.val().toString().trim();
-	let searchURL = searchURLInput.val().toString().trim();
-	let imageURL = iconURLInput.val().toString().trim();
-	let invalid = engineName.length == 0 || searchURL.length == 0 || imageURL.length == 0;
-	invalid = invalid || searchURL.indexOf(searchTermsParam) == -1;
-	if (invalid) {
-		console.log("Error validating the inputs: '" + engineName + "', '" + searchURL + "', '" + imageURL + "'");
-		return;
-	}
-
 	searchURL = searchURL.replace(searchTermsParam, "{searchTerms}");
 	let newSearchEngineXML = xmlTemplate
 		.replace("{ShortName}", engineName)
