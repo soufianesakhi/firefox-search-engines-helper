@@ -23,10 +23,12 @@ After the confirmation, the search engine will be available for use.
 
 ## Exporting All the search engines
 
-For customization purposes, the export of all the search engines can be useful when there is a need to change for example an icon of an existent search engine.
-The search url obtained after an export can be used to add the search engine with the new icon (the search engine must be first deleted using the about:preferences#search page before adding it with the same name)
-There can be other applications in the future.
+### Use cases
+This feature is useful in the following cases:
+- Import the search engines later or on another firefox instance.
+- To change for example an icon of an existing search engine. The search url obtained after an export can be used to add the search engine with the new icon (the search engine must be first deleted using the about:preferences#search page before adding it with the same name).
 
+### Usage
 ![browse-export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/browse-export-all-search-engines.PNG)
 
 After selecting the "search.json.mozlz4" file from the profile folder (http://kb.mozillazine.org/Profile_folder_-_Firefox), the "all-browser-engines.json" file will be available to download.
@@ -34,3 +36,13 @@ This file contains all the search urls and icon urls for all search engines adde
 
 ![export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/export-all-search-engines.PNG)
 
+## Import search engines
+
+The search engines can be imported by selecting the following two files and then clicking the "Import" button:
+- The previously exported json file
+- the "search.json.mozlz4" file from the profile folder (http://kb.mozillazine.org/Profile_folder_-_Firefox)
+
+
+Only search engines with names that are not already added to the current firefox instance will be imported.
+
+Currently only 5 search engines can be imported each 60 seconds because of limitations imposed by the file.io host.
