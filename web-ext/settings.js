@@ -132,7 +132,6 @@ function readMozlz4File(file, onRead, onError) {
 /**
  * @param { Blob } file
  * @param { (searchEngines: any) => void } onParse
- * 
 **/
 function parseBrowserEngines(file, onParse) {
 	readMozlz4File(file, json => {
@@ -203,6 +202,10 @@ var iconURLInput;
 var engineIconDiv;
 var importJsonInput;
 var mozlz4SearchInput;
+/** @type {number} */
+var lastImportWaitTime;
+/** @type {number} */
+var importCount = 0;
 
 function main() {
 	searchURLInput = $("#AddEngineSearchURL");
@@ -210,7 +213,7 @@ function main() {
 	iconURLInput = $("#AddEngineIconURL");
 	engineIconDiv = $("#EngineIcon");
 	$("#addSearchEngine").click(submitSearchEngine);
-	$("#importEngines").click(importSearchEngines);
+	$("#importEngines").click(submitImportSearchEngines);
 
 	$("#exportBrowserEngine").change((ev) => {
 		let file = ev.target['files'][0];
@@ -269,8 +272,7 @@ function submitSearchEngine() {
 	addSearchEngine(searchURL, engineName, imageURL);
 }
 
-// TODO Find workaround for file.io rate limit errors
-function importSearchEngines() {
+function submitImportSearchEngines() {
 	if (!(importJsonInput && mozlz4SearchInput)) {
 		alert("Both the exported json and search.json.mozlz4 files must be selected")
 		return;
@@ -278,19 +280,62 @@ function importSearchEngines() {
 	parseBrowserEngines(mozlz4SearchInput, searchEngines => {
 		parseJsonFile(importJsonInput, importedEngines => {
 			const existingSearchEngines = Object.keys(searchEngines);
-			console.log("existingSearchEngines: ", existingSearchEngines);
-			Object.keys(importedEngines)
+			const enginesToImport = Object.keys(importedEngines)
 				.filter(name => existingSearchEngines.indexOf(name) == -1)
-				.forEach(engineName => {
-					console.log("Importing the search engine: " + engineName);
-					const engine = importedEngines[engineName];
-					addSearchEngine(engine.searchURL, engineName, engine.iconURL);
+				.map(name => {
+					return {
+						searchName: name,
+						searchURL: importedEngines[name].searchURL,
+						iconURL: importedEngines[name].iconURL,
+					}
 				});
+			if (enginesToImport.length > 0) {
+				importSearchEngines(enginesToImport);
+			}
 		})
 	});
 }
 
-function addSearchEngine(searchURL, engineName, imageURL) {
+/**
+ * @param { any[] } enginesToImport
+**/
+function importSearchEngines(enginesToImport) {
+	if (enginesToImport.length == 0) {
+		alert("Search engines successfully imported !")
+		return;
+	}
+	let searchEngine = enginesToImport.pop();
+	console.log("Importing the search engine: " + searchEngine.searchName);
+	addSearchEngine(searchEngine.searchURL, searchEngine.searchName, searchEngine.iconURL,
+		() => {
+			const currentTime = Date.now();
+			if (!lastImportWaitTime) {
+				lastImportWaitTime = currentTime;
+			}
+			let wait = (++importCount == 5);
+			let delay = 2000;
+			if (wait) {
+				delay = 60000 - (currentTime - lastImportWaitTime);
+				lastImportWaitTime = currentTime;
+				importCount = 0;
+			}
+			setTimeout(() => {
+				importSearchEngines(enginesToImport);
+			}, delay);
+			if (wait) {
+				alert("Due to file.io limits, the import will resume after a period of " + Math.abs(delay / 1000) + " seconds");
+			}
+		},
+		(jqXHR, textStatus, errorThrown) => {
+			enginesToImport.push(searchEngine);
+			setTimeout(() => {
+				importSearchEngines(enginesToImport);
+			}, 10000);
+			alert("Error while importing the search engine, retrying after 10 seconds...\n\nError details: " + jqXHR.responseText || JSON.stringify(jqXHR));
+		});
+}
+
+function addSearchEngine(searchURL, engineName, imageURL, successCallback, errorCallback) {
 	if (!xmlTemplate) {
 		$.ajax({
 			url: browser.extension.getURL("search-template.xml"),
@@ -309,10 +354,10 @@ function addSearchEngine(searchURL, engineName, imageURL) {
 		.replace("{SearchURL}", htmlEscape(searchURL))
 		.replace("{ImageURL}", htmlEscape(imageURL));
 
-	postFileIO(newSearchEngineXML);
+	postFileIO(newSearchEngineXML, successCallback, errorCallback);
 }
 
-function postFileIO(newSearchEngineXML) {
+function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
 	var data = new FormData();
 	data.append("file", new File([newSearchEngineXML], "search.xml"));
 	$.ajax({
@@ -323,12 +368,13 @@ function postFileIO(newSearchEngineXML) {
 		processData: false,
 		success: (result) => {
 			if (result.success) {
-				postSuccess(result.link);
+				addSearchProvider(result.link);
+				successCallback ? successCallback() : postSuccess();
 			} else {
 				alert("Error while preparing the search engine's xml definition: " + JSON.stringify(result));
 			}
 		},
-		error: ajaxErrorCallback
+		error: errorCallback || ajaxErrorCallback
 	});
 }
 
@@ -342,13 +388,15 @@ function postUguuSE(newSearchEngineXML) {
 		data: data,
 		contentType: false,
 		processData: false,
-		success: postSuccess,
+		success: xmlUrl => {
+			addSearchProvider(xmlUrl);
+			postSuccess();
+		},
 		error: ajaxErrorCallback
 	});
 }
 
-function postSuccess(xmlUrl) {
-	addSearchProvider(xmlUrl);
+function postSuccess() {
 	engineNameInput.val("");
 	searchURLInput.val("");
 	iconURLInput.val("");
@@ -356,8 +404,11 @@ function postSuccess(xmlUrl) {
 }
 
 function addSearchProvider(url) {
-	// @ts-ignore
-	window.external.AddSearchProvider(url);
+	// Wait for the file to be ready to avoid 404 errors
+	setTimeout(() => {
+		// @ts-ignore
+		window.external.AddSearchProvider(url);
+	}, 1000);
 }
 
 /**
