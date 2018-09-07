@@ -21,6 +21,21 @@ function exportFile(content, filename) {
 }
 
 /**
+ * @param { Blob } file
+ * @param { (obj: any) => void } onRead
+ * 
+**/
+function parseJsonFile(file, onRead) {
+	let reader = new FileReader();
+	reader.onerror = console.error;
+	reader.onload = function () {
+		// @ts-ignore
+		onRead(JSON.parse(reader.result));
+	}
+	reader.readAsText(file);
+}
+
+/**
  * This method's code was taken from node-lz4 by Pierre Curto. MIT license.
  * @param {Uint8Array} input 
  * @param {Uint8Array} output 
@@ -114,6 +129,49 @@ function readMozlz4File(file, onRead, onError) {
 	reader.readAsArrayBuffer(file);	// read as bytes
 };
 
+/**
+ * @param { Blob } file
+ * @param { (searchEngines: any) => void } onParse
+ * 
+**/
+function parseBrowserEngines(file, onParse) {
+	readMozlz4File(file, json => {
+		let browserEnginesData = JSON.parse(json);
+		/** @type {any[]} */
+		let browserEngines = browserEnginesData["engines"];
+		let searchEngines = {};
+		browserEngines.forEach(engine => {
+			let name = engine["_name"];
+			let iconURL = engine["_iconURL"];
+			/** @type {string} */
+			let searchURL = null;
+			/** @type {any[]} */
+			let urls = engine["_urls"];
+			for (let i = 0; i < urls.length && !searchURL; i++) {
+				let e = urls[i];
+				if (!e.type || e.type.indexOf("suggestion") == -1) {
+					searchURL = e.template;
+					/** @type {any[]} */
+					let params = e.params;
+					if (params.length > 0) {
+						searchURL += "?";
+						params.forEach(param => {
+							searchURL += param.name + "=" + param.value + "&";
+						});
+						searchURL = searchURL.substr(0, searchURL.length - 1);
+					}
+				}
+			}
+			searchURL = searchURL.replace(/\{searchTerms\}/g, "%s")
+			searchEngines[name] = {
+				searchURL: searchURL,
+				iconURL: iconURL
+			}
+		});
+		onParse(searchEngines);
+	});
+}
+
 function htmlEscape(url) {
 	let div = $('<div>').text(url);
 	let html = div.html();
@@ -143,6 +201,8 @@ var engineNameInput;
 var iconURLInput;
 /** @type {JQuery} */
 var engineIconDiv;
+var importJsonInput;
+var mozlz4SearchInput;
 
 function main() {
 	searchURLInput = $("#AddEngineSearchURL");
@@ -150,44 +210,22 @@ function main() {
 	iconURLInput = $("#AddEngineIconURL");
 	engineIconDiv = $("#EngineIcon");
 	$("#addSearchEngine").click(submitSearchEngine);
+	$("#importEngines").click(importSearchEngines);
 
 	$("#exportBrowserEngine").change((ev) => {
 		let file = ev.target['files'][0];
-		readMozlz4File(file, json => {
-			let browserEnginesData = JSON.parse(json);
-			/** @type {any[]} */
-			let browserEngines = browserEnginesData["engines"];
-			let exportedBrowserEngines = {};
-			browserEngines.forEach(engine => {
-				let name = engine["_name"];
-				let iconURL = engine["_iconURL"];
-				/** @type {string} */
-				let searchURL = null;
-				/** @type {any[]} */
-				let urls = engine["_urls"];
-				for (let i = 0; i < urls.length && !searchURL; i++) {
-					let e = urls[i];
-					if (!e.type || e.type.indexOf("suggestion") == -1) {
-						searchURL = e.template;
-						/** @type {any[]} */
-						let params = e.params;
-						if (params.length > 0) {
-							searchURL += "?";
-							params.forEach(param => {
-								searchURL += param.name + "=" + param.value + "&";
-							});
-							searchURL = searchURL.substr(0, searchURL.length - 1);
-						}
-					}
-				}
-				searchURL = searchURL.replace(/\{searchTerms\}/g, "%s")
-				exportedBrowserEngines[name] = {
-					searchURL: searchURL,
-					iconURL: iconURL
-				}
-			});
-			exportFile(JSON.stringify(exportedBrowserEngines, null, 4), "all-browser-engines.json");
+		parseBrowserEngines(file, (searchEngines) => {
+			exportFile(JSON.stringify(searchEngines, null, 4), "all-browser-engines.json")
 		});
+	});
+
+
+	$("#importJsonInput").change((ev) => {
+		importJsonInput = ev.target['files'][0];
+	});
+
+	$("#mozlz4SearchInput").change((ev) => {
+		mozlz4SearchInput = ev.target['files'][0];
 	});
 
 	searchURLInput[0].oninput = (ev) => {
@@ -229,6 +267,27 @@ function submitSearchEngine() {
 		return;
 	}
 	addSearchEngine(searchURL, engineName, imageURL);
+}
+
+// TODO Find workaround for file.io rate limit errors
+function importSearchEngines() {
+	if (!(importJsonInput && mozlz4SearchInput)) {
+		alert("Both the exported json and search.json.mozlz4 files must be selected")
+		return;
+	}
+	parseBrowserEngines(mozlz4SearchInput, searchEngines => {
+		parseJsonFile(importJsonInput, importedEngines => {
+			const existingSearchEngines = Object.keys(searchEngines);
+			console.log("existingSearchEngines: ", existingSearchEngines);
+			Object.keys(importedEngines)
+				.filter(name => existingSearchEngines.indexOf(name) == -1)
+				.forEach(engineName => {
+					console.log("Importing the search engine: " + engineName);
+					const engine = importedEngines[engineName];
+					addSearchEngine(engine.searchURL, engineName, engine.iconURL);
+				});
+		})
+	});
 }
 
 function addSearchEngine(searchURL, engineName, imageURL) {
@@ -307,5 +366,6 @@ function addSearchProvider(url) {
  * @param {string} errorThrown 
  */
 function ajaxErrorCallback(jqXHR, textStatus, errorThrown) {
-	console.log(errorThrown);
+	console.log(textStatus + ": " + errorThrown);
+	console.error(jqXHR);
 }
