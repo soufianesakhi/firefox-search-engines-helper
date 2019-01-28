@@ -1,7 +1,7 @@
 {
   "name": "firefox-search-engines-helper",
   "version": "1.2.0",
-  "description": "Add custom firefox search engines",
+  "description": "Export, import and add custom firefox search engines",
   "author": "Soufiane Sakhi",
   "license": "MIT",
   "dependencies": {
