@@ -6,6 +6,8 @@ The settings are accessible from the extension's `Options menu` in the `Add-ons 
 
 ## Adding a custom search engine
 
+![add-search-engine](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine.PNG)
+
 First begin by filling the search url, the two other inputs will be filled automatically with suggested values that can be customized if needed.
 The search engine icon will be rendered to be sure that the url is valid.
 
@@ -19,7 +21,7 @@ A confirmation window will be displayed to add the search engine.
 
 After the confirmation, the search engine will be available for use.
 
-![add-search-engine](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine.PNG)
+![added-search-engine](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/added-search-engine.PNG)
 
 ## Exporting All the search engines
 
@@ -27,6 +29,8 @@ After the confirmation, the search engine will be available for use.
 This feature is useful in the following cases:
 - Import the search engines later or on another firefox instance.
 - To change for example an icon of an existing search engine. The search url obtained after an export can be used to add the search engine with the new icon (the search engine must be first deleted using the about:preferences#search page before adding it with the same name).
+
+![export-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/export.PNG)
 
 ### Usage
 ![browse-export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/browse-export-all-search-engines.PNG)
@@ -37,6 +41,8 @@ This file contains all the search urls and icon urls for all search engines adde
 ![export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/export-all-search-engines.PNG)
 
 ## Import search engines
+
+![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import.PNG)
 
 The search engines can be imported by selecting the following two files and then clicking the "Import" button:
 - The previously exported json file
