@@ -9,7 +9,7 @@
   "browser_action": {
     "default_title": "Search Engines Helper",
     "browser_style": true,
-    "default_popup": "settings.html"
+    "default_popup": "popup.html"
   },
   "web_accessible_resources": ["search-template.xml"],
   "permissions": ["https://file.io/*", "notifications"],
