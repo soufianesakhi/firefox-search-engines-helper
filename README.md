@@ -1,7 +1,9 @@
 # Search Engines Helper for Firefox
-Installation: https://addons.mozilla.org/en-US/firefox/addon/search-engines-helper/
 
-The settings are accessible from the extension's `Options menu` in the `Add-ons Manager`:
+https://addons.mozilla.org/en-US/firefox/addon/search-engines-helper/
+
+The menu is accessible from the add-on's toolbar icon:
+
 ![menu](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/menu.PNG)
 
 ## Adding a custom search engine

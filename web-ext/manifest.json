@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Search Engines Helper",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Add custom search engines",
   "icons": {
     "128": "icons/128.png"
