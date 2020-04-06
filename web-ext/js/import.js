@@ -13,6 +13,11 @@ $("#mozlz4SearchInput").change((ev) => {
   mozlz4SearchInput = ev.target["files"][0];
 });
 
+function resetFileInputs() {
+  $("#importJsonInput").val("");
+  $("#mozlz4SearchInput").val("");
+}
+
 $("#importEngines").click(submitImportSearchEngines);
 
 function submitImportSearchEngines() {
@@ -41,6 +46,7 @@ function submitImportSearchEngines() {
       }
     });
   });
+  resetFileInputs();
 }
 
 /**
