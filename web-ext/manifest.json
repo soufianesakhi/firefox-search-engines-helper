@@ -6,9 +6,10 @@
   "icons": {
     "128": "icons/128.png"
   },
-  "options_ui": {
+  "browser_action": {
+    "default_title": "Search Engines Helper",
     "browser_style": true,
-    "page": "settings.html"
+    "default_popup": "settings.html"
   },
   "web_accessible_resources": ["search-template.xml"],
   "permissions": ["https://file.io/*", "notifications"],

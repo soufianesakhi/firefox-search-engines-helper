@@ -7,7 +7,7 @@ function notify(text, info) {
     // @ts-ignore
     type: "basic",
     title: `Firefox Search Engines Helper${!info ? " Error" : ""}`,
-    message: text
+    message: text,
   });
 }
 
@@ -17,11 +17,11 @@ function notify(text, info) {
  */
 function exportFile(content, filename) {
   var textToSaveAsBlob = new Blob([content], { type: "application/json" });
-  var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+  var textToSaveAsURL = URL.createObjectURL(textToSaveAsBlob);
   var downloadLink = document.createElement("a");
   downloadLink.download = filename ? filename : "export.json";
   downloadLink.href = textToSaveAsURL;
-  downloadLink.onclick = function() {
+  downloadLink.onclick = function () {
     $(downloadLink).remove();
   };
   downloadLink.style.display = "none";
@@ -37,7 +37,7 @@ function exportFile(content, filename) {
 function parseJsonFile(file, onRead) {
   let reader = new FileReader();
   reader.onerror = console.error;
-  reader.onload = function() {
+  reader.onload = function () {
     // @ts-ignore
     onRead(JSON.parse(reader.result));
   };
@@ -112,7 +112,7 @@ function decodeLz4Block(input, output, sIdx, eIdx) {
 function readMozlz4File(file, onRead, onError) {
   let reader = new FileReader();
 
-  reader.onload = function() {
+  reader.onload = function () {
     // @ts-ignore
     let input = new Uint8Array(reader.result);
     let output;
@@ -143,13 +143,13 @@ function readMozlz4File(file, onRead, onError) {
  * @param { (searchEngines: any) => void } onParse
  **/
 function parseBrowserEngines(file, onParse) {
-  readMozlz4File(file, json => {
+  readMozlz4File(file, (json) => {
     try {
       let browserEnginesData = JSON.parse(json);
       /** @type {any[]} */
       let browserEngines = browserEnginesData["engines"];
       let searchEngines = {};
-      browserEngines.forEach(engine => {
+      browserEngines.forEach((engine) => {
         let name = engine["_name"];
         let iconURL = engine["_iconURL"];
         /** @type {string} */
@@ -164,7 +164,7 @@ function parseBrowserEngines(file, onParse) {
             let params = e.params;
             if (params.length > 0) {
               searchURL += "?";
-              params.forEach(param => {
+              params.forEach((param) => {
                 searchURL += param.name + "=" + param.value + "&";
               });
               searchURL = searchURL.substr(0, searchURL.length - 1);
@@ -174,7 +174,7 @@ function parseBrowserEngines(file, onParse) {
         searchURL = searchURL.replace(/\{searchTerms\}/g, "%s");
         searchEngines[name] = {
           searchURL: searchURL,
-          iconURL: iconURL
+          iconURL: iconURL,
         };
       });
       onParse(searchEngines);
@@ -222,6 +222,33 @@ var lastImportWaitTime;
 var importCount = 0;
 
 function main() {
+  $("#add-new").click(() => activatePopupMenu("add-new-menu"));
+  $(".back-item").click(() => activatePopupMenu("main-menu"));
+
+  $("#export-all").click(() =>
+    openPage("pages/export.html", "Export all search engines to json file")
+  );
+
+  $("#import-all").click(() =>
+    openPage("pages/import.html", "Import search engines from a json file")
+  );
+
+  function openPage(pagePath, titlePreface) {
+    browser.windows.create({
+      titlePreface: titlePreface,
+      // @ts-ignore
+      type: "detached_panel",
+      url: pagePath,
+      width: 600,
+      height: 300,
+    });
+  }
+
+  function activatePopupMenu(menuId) {
+    $(".popup-menu").hide();
+    $(`#${menuId}`).show();
+  }
+
   searchURLInput = $("#AddEngineSearchURL");
   engineNameInput = $("#AddEngineName");
   iconURLInput = $("#AddEngineIconURL");
@@ -229,9 +256,9 @@ function main() {
   $("#addSearchEngine").click(submitSearchEngine);
   $("#importEngines").click(submitImportSearchEngines);
 
-  $("#exportBrowserEngine").change(ev => {
+  $("#exportBrowserEngine").change((ev) => {
     let file = ev.target["files"][0];
-    parseBrowserEngines(file, searchEngines => {
+    parseBrowserEngines(file, (searchEngines) => {
       exportFile(
         JSON.stringify(searchEngines, null, 4),
         "all-browser-engines.json"
@@ -239,15 +266,15 @@ function main() {
     });
   });
 
-  $("#importJsonInput").change(ev => {
+  $("#importJsonInput").change((ev) => {
     importJsonInput = ev.target["files"][0];
   });
 
-  $("#mozlz4SearchInput").change(ev => {
+  $("#mozlz4SearchInput").change((ev) => {
     mozlz4SearchInput = ev.target["files"][0];
   });
 
-  searchURLInput[0].oninput = ev => {
+  searchURLInput[0].oninput = (ev) => {
     let iconURL = iconURLInput.val().toString();
     if (iconURL.length > 0) {
       return;
@@ -276,18 +303,9 @@ function refreshEngineIcon() {
 }
 
 function submitSearchEngine() {
-  let engineName = engineNameInput
-    .val()
-    .toString()
-    .trim();
-  let searchURL = searchURLInput
-    .val()
-    .toString()
-    .trim();
-  let imageURL = iconURLInput
-    .val()
-    .toString()
-    .trim();
+  let engineName = engineNameInput.val().toString().trim();
+  let searchURL = searchURLInput.val().toString().trim();
+  let imageURL = iconURLInput.val().toString().trim();
   let invalid =
     engineName.length == 0 || searchURL.length == 0 || imageURL.length == 0;
   invalid = invalid || searchURL.indexOf(searchTermsParam) == -1;
@@ -313,20 +331,22 @@ function submitImportSearchEngines() {
     );
     return;
   }
-  parseBrowserEngines(mozlz4SearchInput, searchEngines => {
-    parseJsonFile(importJsonInput, importedEngines => {
+  parseBrowserEngines(mozlz4SearchInput, (searchEngines) => {
+    parseJsonFile(importJsonInput, (importedEngines) => {
       const existingSearchEngines = Object.keys(searchEngines);
       const enginesToImport = Object.keys(importedEngines)
-        .filter(name => existingSearchEngines.indexOf(name) == -1)
-        .map(name => {
+        .filter((name) => existingSearchEngines.indexOf(name) == -1)
+        .map((name) => {
           return {
             searchName: name,
             searchURL: importedEngines[name].searchURL,
-            iconURL: importedEngines[name].iconURL
+            iconURL: importedEngines[name].iconURL,
           };
         });
       if (enginesToImport.length > 0) {
         importSearchEngines(enginesToImport);
+      } else {
+        notify("No new search engine found", true);
       }
     });
   });
@@ -395,10 +415,10 @@ function addSearchEngine(
       url: browser.extension.getURL("search-template.xml"),
       dataType: "text",
       async: false,
-      success: result => {
+      success: (result) => {
         xmlTemplate = result;
       },
-      error: ajaxErrorCallback
+      error: ajaxErrorCallback,
     });
   }
   searchURL = searchURL.replace(searchTermsParam, "{searchTerms}");
@@ -420,7 +440,7 @@ function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
     data: data,
     contentType: false,
     processData: false,
-    success: result => {
+    success: (result) => {
       if (result.success) {
         addSearchProvider(result.link);
         successCallback ? successCallback() : postSuccess();
@@ -431,7 +451,7 @@ function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
         );
       }
     },
-    error: errorCallback || ajaxErrorCallback
+    error: errorCallback || ajaxErrorCallback,
   });
 }
 
@@ -445,11 +465,11 @@ function postUguuSE(newSearchEngineXML) {
     data: data,
     contentType: false,
     processData: false,
-    success: xmlUrl => {
+    success: (xmlUrl) => {
       addSearchProvider(xmlUrl);
       postSuccess();
     },
-    error: ajaxErrorCallback
+    error: ajaxErrorCallback,
   });
 }
 

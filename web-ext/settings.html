@@ -1,70 +1,61 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="settings.css" />
+  </head>
 
-<head>
-	<meta charset="utf-8">
-	<style>
-		form input {
-			display: block;
-			margin-bottom: 1%;
-		}
-		input {
-			font-size:12px;
-		}
-	</style>
-</head>
+  <body>
+    <!-- Main -->
+    <div id="main-menu" class="popup-menu">
+      <div id="add-new" class="menu-item">
+        Add a new search engine
+        <i></i>
+      </div>
+      <div id="export-all" class="menu-item">
+        Export all search engines to json file
+        <i></i>
+      </div>
+      <div id="import-all" class="menu-item">
+        Import search engines from a json file
+        <i></i>
+      </div>
+    </div>
 
-<body>
-	<fieldset>
-		<legend>Add a new search engine</legend>
-		<form>
-			<div>
-				<label>Search URL: "%s" is substituted with the search terms</label>
-				<input id="AddEngineSearchURL" type="text" style="width: 100%">
-			</div>
-			<div>
-				<label>Search name</label>
-				<input id="AddEngineName" type="text" style="width: 40%">
-			</div>
-			<div>
-				<label>Icon URL: Link or base64 (starting with data:image)</label>
-				<input id="AddEngineIconURL" type="text" style="width: 100%">
-			</div>
-			<div id="EngineIcon">
-				<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" />
-			</div>
-			<div>
-				<input type="button" id="addSearchEngine" value="Add search engine">
-			</div>
-		</form>
-	</fieldset>
-	<fieldset>
-		<legend>Export all search engines to json file</legend>
-		<div>
-			search.json.mozlz4 file (*):
-			<input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>Import search engines from json file</legend>
-		<div>
-			Exported json file:
-			<input id="importJsonInput" type="file" accept=".json" />
-		</div>
-		<div>
-			search.json.mozlz4 file (*) (in order to import only added engines):
-			<input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
-		</div>
-		<div>
-			<input id="importEngines" type="button" value="Import" />
-		</div>
-	</fieldset>
-	<span>(*) Due to Firefox limitations, the "search.json.mozlz4" file must be manually selected from the profile
-		folder
-		<a href="http://kb.mozillazine.org/Profile_folder_-_Firefox">How to locate the profile folder</a></span>
+    <!-- Add a new search engine -->
+    <div id="add-new-menu" class="popup-menu" style="display: none;">
+      <div class="back-item menu-item"><i></i>Back</div>
+      <div class="menu-content">
+        <form>
+          <div>
+            <label>Search URL: "%s" is substituted with the search terms</label>
+            <input id="AddEngineSearchURL" type="text" style="width: 100%;" />
+          </div>
+          <div>
+            <label>Search name</label>
+            <input id="AddEngineName" type="text" style="width: 40%;" />
+          </div>
+          <div>
+            <label>Icon URL: Link or base64 (starting with data:image)</label>
+            <input id="AddEngineIconURL" type="text" style="width: 100%;" />
+          </div>
+          <div id="EngineIcon">
+            <img
+              src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"
+            />
+          </div>
+          <div>
+            <input
+              type="button"
+              id="addSearchEngine"
+              value="Add search engine"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
 
-	<script src="settings.js"></script>
-	<script src="jquery.min.js"></script>
-</body>
-
+    <script src="settings.js"></script>
+    <script src="jquery.min.js"></script>
+  </body>
 </html>

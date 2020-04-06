@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #212529;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+form input {
+  display: block;
+  margin-bottom: 1%;
+}
+
+.menu-content {
+  padding: 1rem;
+  overflow-x: hidden;
+}
+
+.menu-item:hover,
+.menu-item.back-item:hover {
+  background-color: #cff2f2;
+}
+
+.back-item {
+  background-color: #eef0f0;
+}
+
+.menu-item {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  text-align: left;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+.menu-item > i {
+  border-bottom: 6px solid transparent;
+  border-top: 6px solid transparent;
+  border-left: 6px solid #000000;
+  float: right;
+  margin: 0.5rem 0rem 0.5rem 1rem;
+}
+
+.back-item.menu-item > i {
+  border-left: none;
+  border-right: 6px solid #000000;
+  float: left;
+  margin: 0.4rem 1.4rem 0.4rem 0rem;
+}
+
+.content-panel {
+  padding: 1rem;
+}
+
+.footnote {
+  font-size: 8px;
+}
+
+#add-new-menu {
+  min-height: 250px;
+}

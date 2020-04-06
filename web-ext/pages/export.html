@@ -1,0 +1,27 @@
+<!-- Export all search engines to json file -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../settings.css" />
+  </head>
+  <body>
+    <div class="content-panel">
+      <div>
+        search.json.mozlz4 file (*):
+        <input id="exportBrowserEngine" type="file" accept=".json.mozlz4" />
+      </div>
+      <br />
+      <span class="footnote">
+        (*) Due to Firefox limitations, the "search.json.mozlz4" file must be
+        manually selected from the profile folder
+        <a href="http://kb.mozillazine.org/Profile_folder_-_Firefox"
+          >How to locate the profile folder</a
+        ></span
+      >
+    </div>
+
+    <script src="../settings.js"></script>
+    <script src="../jquery.min.js"></script>
+  </body>
+</html>
