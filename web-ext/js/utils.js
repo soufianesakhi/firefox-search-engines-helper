@@ -167,34 +167,36 @@ function parseBrowserEngines(file, onParse) {
       /** @type {any[]} */
       let browserEngines = browserEnginesData["engines"];
       let searchEngines = {};
-      browserEngines.forEach((engine) => {
-        let name = engine["_name"];
-        let iconURL = engine["_iconURL"];
-        /** @type {string} */
-        let searchURL = null;
-        /** @type {any[]} */
-        let urls = engine["_urls"];
-        for (let i = 0; i < urls.length && !searchURL; i++) {
-          let e = urls[i];
-          if (!e.type || e.type.indexOf("suggestion") == -1) {
-            searchURL = e.template;
-            /** @type {any[]} */
-            let params = e.params;
-            if (params.length > 0) {
-              searchURL += "?";
-              params.forEach((param) => {
-                searchURL += param.name + "=" + param.value + "&";
-              });
-              searchURL = searchURL.substr(0, searchURL.length - 1);
+      browserEngines
+        .filter((engine) => engine["_urls"] && !engine["_isBuiltin"])
+        .forEach((engine) => {
+          let name = engine["_name"];
+          let iconURL = engine["_iconURL"];
+          /** @type {string} */
+          let searchURL = null;
+          /** @type {any[]} */
+          let urls = engine["_urls"];
+          for (let i = 0; i < urls.length && !searchURL; i++) {
+            let e = urls[i];
+            if (!e.type || e.type.indexOf("suggestion") == -1) {
+              searchURL = e.template;
+              /** @type {any[]} */
+              let params = e.params;
+              if (params.length > 0) {
+                searchURL += "?";
+                params.forEach((param) => {
+                  searchURL += param.name + "=" + param.value + "&";
+                });
+                searchURL = searchURL.substr(0, searchURL.length - 1);
+              }
             }
           }
-        }
-        searchURL = searchURL.replace(/\{searchTerms\}/g, "%s");
-        searchEngines[name] = {
-          searchURL: searchURL,
-          iconURL: iconURL,
-        };
-      });
+          searchURL = searchURL.replace(/\{searchTerms\}/g, "%s");
+          searchEngines[name] = {
+            searchURL: searchURL,
+            iconURL: iconURL,
+          };
+        });
       onParse(searchEngines);
     } catch (e) {
       console.log(e);
