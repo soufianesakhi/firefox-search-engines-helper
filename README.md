@@ -15,11 +15,15 @@ The search engine icon will be rendered to be sure that the url is valid.
 
 When the inputs are ready, press the "Add search engine" button.
 
-A confirmation window will be displayed to add the search engine.
+On Firefox 78 or later, a page will be opened with the search engine available to install from the search bar menu or the page actions menu (detailed instructions are displayed on the same page).
 
-(Due to technical limitations, no API is available to directly add a search engine from an extension starting with Firefox 57, that's why the website file.io is used to temporarily host the open search xml that will be used by Firefox to add the engine.)
+![menu](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/web-ext/images/Add%20from%20page%20actions%20menu.png)
+
+On Firefox 77 and earlier, a confirmation window will be displayed to add the search engine.
 
 ![add-search-engine-confirmation](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine-confirmation.PNG)
+
+(Due to technical limitations, no API is available to directly add a search engine from an extension starting with Firefox 57, that's why the website file.io is used to temporarily host the open search xml that will be used by Firefox to add the engine.)
 
 After the confirmation, the search engine will be available for use.
 
