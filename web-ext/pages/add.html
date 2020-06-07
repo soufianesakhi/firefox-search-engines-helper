@@ -1,0 +1,39 @@
+<!-- Export all search engines to json file -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Add a new search engine</title>
+  </head>
+  <body>
+    <div class="content-panel">
+      <form>
+        <div>
+          <label>Search URL: "%s" is substituted with the search terms</label>
+          <input id="AddEngineSearchURL" type="text" style="width: 100%;" />
+        </div>
+        <div>
+          <label>Search name</label>
+          <input id="AddEngineName" type="text" style="width: 40%;" />
+        </div>
+        <div>
+          <label>Icon URL: Link or base64 (starting with data:image)</label>
+          <input id="AddEngineIconURL" type="text" style="width: 100%;" />
+        </div>
+        <div id="EngineIcon">
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"
+          />
+        </div>
+        <div>
+          <input type="button" id="addSearchEngine" value="Add search engine" />
+        </div>
+      </form>
+    </div>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/add.js"></script>
+  </body>
+</html>

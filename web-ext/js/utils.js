@@ -57,7 +57,9 @@ async function addSearchEngineAsAction(definition) {
     url: "/pages/add-search-engine.html",
     active: true,
   });
-  await browser.tabs.executeScript(tab.id, { file: "js/add-search-engine.js" });
+  await browser.tabs.executeScript(tab.id, {
+    file: "/js/add-search-engine.js",
+  });
   browser.tabs.sendMessage(tab.id, definition);
 }
 
