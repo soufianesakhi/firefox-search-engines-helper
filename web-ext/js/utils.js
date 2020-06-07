@@ -1,6 +1,12 @@
+/// <reference path="./data.d.ts" />
+
 /** @type {string} */
 var xmlTemplate;
 const searchTermsParam = "%s";
+var browserVersion;
+browser.runtime
+  .getBrowserInfo()
+  .then((infos) => (browserVersion = infos.version.split(".")[0]));
 
 function addSearchEngine(
   searchURL,
@@ -27,7 +33,32 @@ function addSearchEngine(
     .replace("{SearchURL}", htmlEscape(searchURL))
     .replace("{ImageURL}", htmlEscape(imageURL));
 
-  postFileIO(newSearchEngineXML, successCallback, errorCallback);
+  let callback = (url) => {
+    if (browserVersion > 77) {
+      addSearchEngineAsAction({
+        opensearchUrl: url,
+        imageUrl: imageURL,
+        title: engineName,
+      });
+    } else {
+      // @ts-ignore
+      window.external.AddSearchProvider(url);
+    }
+    successCallback();
+  };
+  postFileIO(newSearchEngineXML, callback, errorCallback);
+}
+
+/**
+ * @param  {SearchEngineDefinition} definition
+ */
+async function addSearchEngineAsAction(definition) {
+  const tab = await browser.tabs.create({
+    url: "/pages/add-search-engine.html",
+    active: true,
+  });
+  await browser.tabs.executeScript(tab.id, { file: "js/add-search-engine.js" });
+  browser.tabs.sendMessage(tab.id, definition);
 }
 
 function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
@@ -41,8 +72,10 @@ function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
     processData: false,
     success: (result) => {
       if (result.success) {
-        addSearchProvider(result.link);
-        successCallback();
+        // Wait for the file to be ready to avoid 404 errors
+        setTimeout(() => {
+          successCallback(result.link);
+        }, 1000);
       } else {
         notify(
           "Error while preparing the search engine's xml definition: " +
@@ -52,14 +85,6 @@ function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
     },
     error: errorCallback,
   });
-}
-
-function addSearchProvider(url) {
-  // Wait for the file to be ready to avoid 404 errors
-  setTimeout(() => {
-    // @ts-ignore
-    window.external.AddSearchProvider(url);
-  }, 1000);
 }
 
 /**
