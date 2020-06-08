@@ -46,7 +46,7 @@ This file contains all the search urls and icon urls for all search engines adde
 
 ![export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/export-all-search-engines.PNG)
 
-## Import search engines
+## Import search engines (time limited)
 
 ![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import.PNG)
 
@@ -58,3 +58,6 @@ The search engines can be imported by selecting the following two files and then
 Only search engines with names that are not already added to the current firefox instance will be imported.
 
 Currently only 5 search engines can be imported each 60 seconds because of limitations imposed by the file.io host.
+
+## Import search engines from a json file offline (requires file manipulation)
+![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import-offline.PNG)

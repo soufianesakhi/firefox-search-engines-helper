@@ -1,0 +1,50 @@
+<!-- Import search engines from a json file -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Import search engines (offline)</title>
+  </head>
+  <body>
+    <div class="content-panel">
+      <p>
+        1. Select the exported json file:
+        <input id="importJsonInput" type="file" accept=".json" />
+      </p>
+      <p>
+        2. Select the search.json.mozlz4 file from the current Firefox
+        <a
+          href="http://kb.mozillazine.org/Profile_folder_-_Firefox#Navigating_to_the_profile_folder"
+          target="_blank"
+          >profile folder</a
+        >:
+        <input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
+      </p>
+      <p>
+        3.
+        <input
+          id="importEnginesOffline"
+          type="button"
+          value="Generate search.json.mozlz4"
+        />
+      </p>
+      <p>
+        4. Close Firefox, then navigate to your current Firefox profile folder.
+      </p>
+      <p>
+        5. Make a backup of the "search.json.mozlz4" file (add a ".old" to the
+        filename for example).
+      </p>
+      <p>
+        6. Copy the generated "search.json.mozlz4" to this folder, then start
+        Firefox.
+      </p>
+    </p>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/lz4.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/import-all-offline.js"></script>
+  </body>
+</html>

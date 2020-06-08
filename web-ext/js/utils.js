@@ -89,71 +89,6 @@ function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
   });
 }
 
-/**
- * This method's code was taken from node-lz4 by Pierre Curto. MIT license.
- * @param {Uint8Array} input
- * @param {Uint8Array} output
- * @param {number} sIdx
- * @param {number} [eIdx]
- */
-function decodeLz4Block(input, output, sIdx, eIdx) {
-  sIdx = sIdx || 0;
-  eIdx = eIdx || input.length;
-
-  // Process each sequence in the incoming data
-  for (var i = sIdx, j = 0; i < eIdx; ) {
-    var token = input[i++];
-
-    // Literals
-    var literals_length = token >> 4;
-    if (literals_length > 0) {
-      // length of literals
-      var l = literals_length + 240;
-      while (l === 255) {
-        l = input[i++];
-        literals_length += l;
-      }
-
-      // Copy the literals
-      var end = i + literals_length;
-      while (i < end) {
-        output[j++] = input[i++];
-      }
-
-      // End of buffer?
-      if (i === eIdx) {
-        return j;
-      }
-    }
-
-    // Match copy
-    // 2 bytes offset (little endian)
-    var offset = input[i++] | (input[i++] << 8);
-
-    // 0 is an invalid offset value
-    if (offset === 0 || offset > j) {
-      return -(i - 2);
-    }
-
-    // length of match copy
-    var match_length = token & 0xf;
-    var l = match_length + 240;
-    while (l === 255) {
-      l = input[i++];
-      match_length += l;
-    }
-
-    // Copy the match
-    var pos = j - offset; // position of the match copy in the current output
-    var end = j + match_length + 4; // minmatch = 4
-    while (j < end) {
-      output[j++] = output[pos++];
-    }
-  }
-
-  return j;
-}
-
 function readMozlz4File(file, onRead, onError) {
   let reader = new FileReader();
 
@@ -183,6 +118,20 @@ function readMozlz4File(file, onRead, onError) {
   reader.readAsArrayBuffer(file); // read as bytes
 }
 
+function exportMozlz4(data) {
+  const content = encodeMozlz4(data);
+  var blobURL = URL.createObjectURL(new Blob([content]));
+  var downloadLink = document.createElement("a");
+  downloadLink.download = "search.json.mozlz4";
+  downloadLink.href = blobURL;
+  downloadLink.onclick = function () {
+    $(downloadLink).remove();
+  };
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+}
+
 /**
  * @param { Blob } file
  * @param { (searchEngines: any) => void } onParse
@@ -205,7 +154,10 @@ function parseBrowserEngines(file, onParse) {
           let urls = engine["_urls"];
           for (let i = 0; i < urls.length && !searchURL; i++) {
             let e = urls[i];
-            if (!e.type || e.type.indexOf("suggestion") == -1) {
+            if (
+              e.template.indexOf("{searchTerms}") > -1 &&
+              (!e.type || e.type.indexOf("suggestion") == -1)
+            ) {
               searchURL = e.template;
               /** @type {any[]} */
               let params = e.params;
