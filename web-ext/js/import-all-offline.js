@@ -38,12 +38,16 @@ function submitImportSearchEngines() {
         );
         searchNames.forEach((searchName) => {
           const engine = importedEngines[searchName];
+          const metaData = {};
+          if (engine.keyword) {
+            metaData.alias = engine.keyword;
+          }
           browserEngines.push({
             __searchForm: "",
             _isBuiltin: false,
             _iconURL: engine.iconURL,
             _loadPath: `[other]/search-engines-helper`,
-            _metaData: {},
+            _metaData: metaData,
             _name: searchName,
             _shortName: searchName,
             _urls: [

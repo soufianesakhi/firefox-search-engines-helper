@@ -134,7 +134,7 @@ function exportMozlz4(data) {
 
 /**
  * @param { Blob } file
- * @param { (searchEngines: any) => void } onParse
+ * @param { (searchEngines: SearchEngineExport) => void } onParse
  **/
 function parseBrowserEngines(file, onParse) {
   readMozlz4File(file, (json) => {
@@ -142,12 +142,14 @@ function parseBrowserEngines(file, onParse) {
       let browserEnginesData = JSON.parse(json);
       /** @type {any[]} */
       let browserEngines = browserEnginesData["engines"];
+      /** @type {SearchEngineExport} */
       let searchEngines = {};
       browserEngines
         .filter((engine) => engine["_urls"] && !engine["_isBuiltin"])
         .forEach((engine) => {
           let name = engine["_name"];
           let iconURL = engine["_iconURL"];
+          let keyword = engine["_metaData"].alias || undefined;
           /** @type {string} */
           let searchURL = null;
           /** @type {any[]} */
@@ -174,6 +176,7 @@ function parseBrowserEngines(file, onParse) {
           searchEngines[name] = {
             searchURL: searchURL,
             iconURL: iconURL,
+            keyword: keyword,
           };
         });
       onParse(searchEngines);
@@ -186,7 +189,7 @@ function parseBrowserEngines(file, onParse) {
 
 /**
  * @param { Blob } file
- * @param { (obj: any) => void } onRead
+ * @param { (obj: SearchEngineExport) => void } onRead
  *
  **/
 function parseJsonFile(file, onRead) {

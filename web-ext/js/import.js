@@ -50,7 +50,7 @@ function submitImportSearchEngines() {
 }
 
 /**
- * @param { any[] } enginesToImport
+ * @param { SearchEngine[] } enginesToImport
  **/
 function importSearchEngines(enginesToImport) {
   if (enginesToImport.length == 0) {

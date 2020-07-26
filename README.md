@@ -61,5 +61,3 @@ Currently only 5 search engines can be imported each 60 seconds because of limit
 
 ## Import search engines from a json file offline (requires file manipulation)
 ![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import-offline.PNG)
-
-## [Import search engines from Google Chrome](https://github.com/soufianesakhi/firefox-search-engines-helper/wiki/Import-search-engines-from-Google-Chrome)
