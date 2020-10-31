@@ -35,19 +35,20 @@ function submitSearchEngine() {
   let engineName = engineNameInput.val().toString().trim();
   let searchURL = searchURLInput.val().toString().trim();
   let imageURL = iconURLInput.val().toString().trim();
-  let invalid =
-    engineName.length == 0 || searchURL.length == 0 || imageURL.length == 0;
-  invalid = invalid || searchURL.indexOf(searchTermsParam) == -1;
-  if (invalid) {
-    console.log(
-      "Error validating the inputs: '" +
-        engineName +
-        "', '" +
-        searchURL +
-        "', '" +
-        imageURL +
-        "'"
-    );
+  if (searchURL.length == 0) {
+    notify("The search URL cannot be empty");
+    return;
+  }
+  if (engineName.length == 0) {
+    notify("The search name cannot be empty");
+    return;
+  }
+  if (imageURL.length == 0) {
+    notify("The image URL cannot be empty");
+    return;
+  }
+  if(searchURL.indexOf(searchTermsParam) == -1) {
+    notify(`"${searchTermsParam}" missing from the search URL`);
     return;
   }
   addSearchEngine(
