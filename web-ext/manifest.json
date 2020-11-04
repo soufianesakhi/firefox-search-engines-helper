@@ -12,7 +12,7 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": ["search-template.xml"],
-  "permissions": ["https://file.io/*", "notifications"],
+  "permissions": ["notifications"],
   "applications": {
     "gecko": {
       "strict_min_version": "57.0"

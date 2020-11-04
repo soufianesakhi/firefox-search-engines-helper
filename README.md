@@ -23,8 +23,6 @@ On Firefox 77 and earlier, a confirmation window will be displayed to add the se
 
 ![add-search-engine-confirmation](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine-confirmation.PNG)
 
-(Due to technical limitations, no API is available to directly add a search engine from an extension starting with Firefox 57, that's why the website file.io is used to temporarily host the open search xml that will be used by Firefox to add the engine.)
-
 After the confirmation, the search engine will be available for use.
 
 ![added-search-engine](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/added-search-engine.PNG)
@@ -46,7 +44,7 @@ This file contains all the search urls and icon urls for all search engines adde
 
 ![export-all-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/export-all-search-engines.PNG)
 
-## Import search engines (time limited)
+## Import search engines
 
 ![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import.PNG)
 
@@ -56,8 +54,6 @@ The search engines can be imported by selecting the following two files and then
 
 
 Only search engines with names that are not already added to the current firefox instance will be imported.
-
-Currently only 5 search engines can be imported each 60 seconds because of limitations imposed by the file.io host.
 
 ## Import search engines from a json file offline (requires file manipulation)
 ![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import-offline.PNG)

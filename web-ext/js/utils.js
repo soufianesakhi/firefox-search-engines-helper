@@ -33,20 +33,20 @@ function addSearchEngine(
     .replace("{SearchURL}", htmlEscape(searchURL))
     .replace("{ImageURL}", htmlEscape(imageURL));
 
-  let callback = (url) => {
-    if (browserVersion > 77) {
-      addSearchEngineAsAction({
-        opensearchUrl: url,
-        imageUrl: imageURL,
-        title: engineName,
-      });
-    } else {
-      // @ts-ignore
-      window.external.AddSearchProvider(url);
-    }
+  const url = getUrl(newSearchEngineXML);
+  if (browserVersion > 77) {
+    addSearchEngineAsAction({
+      opensearchUrl: url,
+      imageUrl: imageURL,
+      title: engineName,
+    });
+  } else {
+    // @ts-ignore
+    window.external.AddSearchProvider(url);
+  }
+  if (successCallback) {
     successCallback();
-  };
-  postFileIO(newSearchEngineXML, callback, errorCallback);
+  }
 }
 
 /**
@@ -63,30 +63,8 @@ async function addSearchEngineAsAction(definition) {
   browser.tabs.sendMessage(tab.id, definition);
 }
 
-function postFileIO(newSearchEngineXML, successCallback, errorCallback) {
-  var data = new FormData();
-  data.append("file", new File([newSearchEngineXML], "search.xml"));
-  $.ajax({
-    url: "https://file.io/?expires=1",
-    method: "POST",
-    data: data,
-    contentType: false,
-    processData: false,
-    success: (result) => {
-      if (result.success) {
-        // Wait for the file to be ready to avoid 404 errors
-        setTimeout(() => {
-          successCallback(result.link);
-        }, 1000);
-      } else {
-        notify(
-          "Error while preparing the search engine's xml definition: " +
-            JSON.stringify(result)
-        );
-      }
-    },
-    error: errorCallback,
-  });
+function getUrl(xml) {
+  return "http://urlecho.appspot.com/echo?status=200&body=" + encodeURIComponent(xml);
 }
 
 function readMozlz4File(file, onRead, onError) {
