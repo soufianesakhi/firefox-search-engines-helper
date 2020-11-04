@@ -2,7 +2,9 @@ var searchURLInput = $("#AddEngineSearchURL");
 var engineNameInput = $("#AddEngineName");
 var iconURLInput = $("#AddEngineIconURL");
 var engineIconDiv = $("#EngineIcon");
+var loadImageInput = $("#loadImage");
 $("#addSearchEngine").click(submitSearchEngine);
+loadImageInput.change(loadImage);
 
 searchURLInput[0].oninput = (ev) => {
   let iconURL = iconURLInput.val().toString();
@@ -60,10 +62,25 @@ function submitSearchEngine() {
   );
 }
 
+function loadImage(ev) {
+  /** @type {Blob} */
+  const file = ev.target["files"][0];
+  const reader = new FileReader()
+  reader.onloadend = () => {
+    // @ts-ignore
+    $("#AddEngineIconURL").val(reader.result);
+  }
+  reader.onerror = () => {
+    notify("Error while loading the image: " + JSON.stringify(reader.error));
+  }
+  reader.readAsDataURL(file);
+}
+
 function postSuccess() {
   engineNameInput.val("");
   searchURLInput.val("");
   iconURLInput.val("");
+  loadImageInput.val("");
   engineIconDiv.empty();
 }
 
