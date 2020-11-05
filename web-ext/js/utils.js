@@ -150,7 +150,10 @@ function parseBrowserEngines(file, onParse) {
               }
             }
           }
-          searchURL = searchURL.replace(/\{searchTerms\}/g, "%s");
+          if (!searchURL) {
+            return;
+          }
+          searchURL = searchURL.replace(/\{searchTerms\}/g, searchTermsParam);
           searchEngines[name] = {
             searchURL: searchURL,
             iconURL: iconURL,
