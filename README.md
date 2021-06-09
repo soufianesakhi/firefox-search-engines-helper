@@ -17,6 +17,9 @@ When the inputs are ready, press the "Add search engine" button.
 
 On Firefox 78 or later, a page will be opened with the search engine available to install from the search bar menu or the page actions menu (detailed instructions are displayed on the same page).
 
+On Firefox 89 or later (redesign) right-click in the URL bar to show the page actions:
+![page actions](https://user-images.githubusercontent.com/169885/121367278-78fc0300-c93a-11eb-998a-15a0f78eafb9.png)
+
 ![menu](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/web-ext/images/Add%20from%20page%20actions%20menu.png)
 
 On Firefox 77 and earlier, a confirmation window will be displayed to add the search engine.
