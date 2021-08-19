@@ -64,7 +64,7 @@ async function addSearchEngineAsAction(definition) {
 }
 
 function getUrl(xml) {
-  return "http://urlecho.appspot.com/echo?status=200&body=" + encodeURIComponent(xml);
+  return "https://search-engines-helper.herokuapp.com/" + encodeURIComponent(xml);
 }
 
 function readMozlz4File(file, onRead, onError) {
