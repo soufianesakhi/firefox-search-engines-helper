@@ -64,7 +64,7 @@ async function addSearchEngineAsAction(definition) {
 }
 
 function getUrl(xml) {
-  return "https://search-engines-helper.herokuapp.com/" + encodeURIComponent(xml);
+  return "https://http-request-echo-server.onrender.com/" + encodeURIComponent(xml);
 }
 
 function readMozlz4File(file, onRead, onError) {
