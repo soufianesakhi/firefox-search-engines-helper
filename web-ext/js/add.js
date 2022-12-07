@@ -12,7 +12,7 @@ searchURLInput[0].oninput = (ev) => {
     return;
   }
   let url = searchURLInput.val().toString();
-  if (url.indexOf(searchTermsParam) == -1) {
+  if (invalidSearchTermsParam(url)) {
     return;
   }
   let hostname = extractHostname(url);
@@ -49,7 +49,7 @@ function submitSearchEngine() {
     notify("The image URL cannot be empty");
     return;
   }
-  if(searchURL.indexOf(searchTermsParam) == -1) {
+  if(invalidSearchTermsParam(searchURL)) {
     notify(`"${searchTermsParam}" missing from the search URL`);
     return;
   }
@@ -92,4 +92,8 @@ function postSuccess() {
 function ajaxErrorCallback(jqXHR, textStatus, errorThrown) {
   console.log(textStatus + ": " + errorThrown);
   console.error(jqXHR);
+}
+
+function invalidSearchTermsParam(url) {
+  return url.indexOf(searchTermsParam) < 0 && url.indexOf("{searchTerms}") < 0;
 }

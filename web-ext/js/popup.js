@@ -15,6 +15,7 @@ function openTab(pagePath) {
     url: pagePath,
     active: true,
   });
+  window.close();
 }
 
 function openPage(pagePath, titlePreface) {
@@ -26,4 +27,5 @@ function openPage(pagePath, titlePreface) {
     width: 600,
     height: 300,
   });
+  window.close();
 }
