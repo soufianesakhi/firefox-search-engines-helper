@@ -10,6 +10,8 @@ $("#import-all").click(() =>
 
 $("#import-all-offline").click(() => openTab("/pages/import-all-offline.html"));
 
+$("#open-settings").click(() => openTab("/pages/settings.html"));
+
 function openTab(pagePath) {
   browser.tabs.create({
     url: pagePath,

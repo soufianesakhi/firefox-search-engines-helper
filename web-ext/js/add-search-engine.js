@@ -1,5 +1,3 @@
-/// <reference path="./data.d.ts" />
-
 const opensearch_xml_mime_type = "application/opensearchdescription+xml";
 
 /**

@@ -6,7 +6,7 @@ var loadImageInput = $("#loadImage");
 $("#addSearchEngine").click(submitSearchEngine);
 loadImageInput.change(loadImage);
 
-searchURLInput[0].oninput = (ev) => {
+searchURLInput[0].oninput = async (ev) => {
   let iconURL = iconURLInput.val().toString();
   if (iconURL.length > 0) {
     return;
@@ -15,9 +15,27 @@ searchURLInput[0].oninput = (ev) => {
   if (invalidSearchTermsParam(url)) {
     return;
   }
+  const settings = await getSettings();
   let hostname = extractHostname(url);
   if (hostname.length > 0) {
-    iconURLInput.val("https://www.google.com/s2/favicons?domain=" + hostname);
+    let iconUrl = "";
+    switch (settings.faviconService) {
+      case "favicon.ico":
+        try {
+          displayLoader();
+          iconUrl = await getFaviconIcoUrl(url);
+        } finally {
+          hideLoader();
+        }
+        break;
+      case "faviconkit":
+        iconUrl = `https://api.faviconkit.com/${hostname}/32`;
+        break;
+      default:
+        iconUrl = `https://www.google.com/s2/favicons?domain=${hostname}`;
+        break;
+    }
+    iconURLInput.val(iconUrl);
     refreshEngineIcon();
     if (engineNameInput.val().toString().length == 0) {
       engineNameInput.val(hostname.replace("www.", ""));
@@ -49,7 +67,7 @@ function submitSearchEngine() {
     notify("The image URL cannot be empty");
     return;
   }
-  if(invalidSearchTermsParam(searchURL)) {
+  if (invalidSearchTermsParam(searchURL)) {
     notify(`"${searchTermsParam}" missing from the search URL`);
     return;
   }
@@ -65,14 +83,14 @@ function submitSearchEngine() {
 function loadImage(ev) {
   /** @type {Blob} */
   const file = ev.target["files"][0];
-  const reader = new FileReader()
+  const reader = new FileReader();
   reader.onloadend = () => {
     // @ts-ignore
     $("#AddEngineIconURL").val(reader.result);
-  }
+  };
   reader.onerror = () => {
     notify("Error while loading the image: " + JSON.stringify(reader.error));
-  }
+  };
   reader.readAsDataURL(file);
 }
 
@@ -97,3 +115,7 @@ function ajaxErrorCallback(jqXHR, textStatus, errorThrown) {
 function invalidSearchTermsParam(url) {
   return url.indexOf(searchTermsParam) < 0 && url.indexOf("{searchTerms}") < 0;
 }
+
+addEventListener("load", () => {
+  fetch(serverUrl);
+});

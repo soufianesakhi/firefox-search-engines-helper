@@ -17,3 +17,12 @@ interface SearchEngineDTO {
 }
 
 type SearchEngineExport = { [name: string]: SearchEngineDTO };
+
+interface Settings {
+  faviconService: "favicon.ico" | "faviconkit" | "";
+}
+
+interface Option {
+  restore();
+  save(): Promise<any>;
+}

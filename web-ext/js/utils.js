@@ -1,5 +1,3 @@
-/// <reference path="./data.d.ts" />
-
 /** @type {string} */
 var xmlTemplate;
 const searchTermsParam = "%s";
@@ -63,8 +61,25 @@ async function addSearchEngineAsAction(definition) {
   browser.tabs.sendMessage(tab.id, definition);
 }
 
+const serverUrl = "https://http-request-echo-server.onrender.com/";
+
 function getUrl(xml) {
-  return "https://http-request-echo-server.onrender.com/" + encodeURIComponent(xml);
+  return serverUrl + encodeURIComponent(xml);
+}
+
+async function getFaviconIcoUrl(url) {
+  const baseUrl = getBaseUrl(url);
+  try {
+    const result = await fetch(`${serverUrl}${baseUrl}`, {
+      headers: {
+        Accept: "application/vnd.favicon.url",
+      },
+    });
+    return await result.text();
+  } catch (err) {
+    console.error(err);
+    return "";
+  }
 }
 
 function readMozlz4File(file, onRead, onError) {
@@ -201,6 +216,17 @@ function extractHostname(url) {
   return hostname;
 }
 
+function getBaseUrl(url) {
+  var a = document.createElement("a");
+  a.href = url;
+  if (a.protocol === "moz-extension:") {
+    return "";
+  }
+  let baseUrl = a.protocol + "//" + a.hostname;
+  a.remove();
+  return baseUrl;
+}
+
 function notify(text, info) {
   browser.notifications.create({
     // @ts-ignore
@@ -208,4 +234,21 @@ function notify(text, info) {
     title: `Firefox Search Engines Helper${!info ? " Error" : ""}`,
     message: text,
   });
+}
+
+function displayLoader() {
+  const container = document.createElement("div");
+  container.id = "loader-container";
+  container.innerHTML = `
+    <div class="overlay">
+      <div class="overlay__inner">
+          <div class="overlay__content"><span class="spinner"></span></div>
+      </div>
+    </div>
+  `;
+  document.body.append(container);
+}
+
+function hideLoader() {
+  document.getElementById("loader-container")?.remove();
 }
