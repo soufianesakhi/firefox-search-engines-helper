@@ -15,16 +15,9 @@ The search engine icon will be rendered to be sure that the url is valid.
 
 When the inputs are ready, press the "Add search engine" button.
 
-On Firefox 78 or later, a page will be opened with the search engine available to install from the search bar menu or the page actions menu (detailed instructions are displayed on the same page).
+A page will be opened with the search engine available to install from the search bar menu or the page actions menu (detailed instructions are displayed on the same page).
 
-On Firefox 89 or later (redesign) right-click in the URL bar to show the page actions:
-![page actions](https://user-images.githubusercontent.com/169885/121367278-78fc0300-c93a-11eb-998a-15a0f78eafb9.png)
-
-![menu](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/web-ext/images/Add%20from%20page%20actions%20menu.png)
-
-On Firefox 77 and earlier, a confirmation window will be displayed to add the search engine.
-
-![add-search-engine-confirmation](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/add-search-engine-confirmation.PNG)
+![add-search-engine](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/web-ext/images/Add%20search.png)
 
 After the confirmation, the search engine will be available for use.
 
@@ -60,3 +53,11 @@ Only search engines with names that are not already added to the current firefox
 
 ## Import search engines from a json file offline (requires file manipulation)
 ![import-search-engines](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/import-offline.PNG)
+
+## Settings
+
+From settings page, you can:
+- Change the default favicon url that will be auto-filled after the search url input is entered
+- Optionally display an input that can be used to test the search url with the provided search terms
+
+![settings](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/settings.PNG)
