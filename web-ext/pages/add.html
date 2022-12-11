@@ -11,11 +11,16 @@
       <form>
         <div>
           <label>Search URL: "%s" is substituted with the search terms</label>
-          <input id="AddEngineSearchURL" type="text" style="width: 100%;" />
+          <input id="AddEngineSearchURL" type="text" style="width: 100%" />
+        </div>
+        <div id="TestSearchURLContainer" style="display: none">
+          <label>Search terms</label>
+          <input id="TestSearchURLTerms" type="text" style="width: 100%" />
+          <input type="button" id="TestSearchURL" value="Test" />
         </div>
         <div>
           <label>Search name</label>
-          <input id="AddEngineName" type="text" style="width: 40%;" />
+          <input id="AddEngineName" type="text" style="width: 40%" />
         </div>
         <div>
           <label
@@ -27,7 +32,7 @@
             supported):</label
           >
           <div style="display: flex">
-            <input id="AddEngineIconURL" type="text" style="flex: 2;"/>
+            <input id="AddEngineIconURL" type="text" style="flex: 2" />
             <input type="file" id="loadImage" />
           </div>
         </div>

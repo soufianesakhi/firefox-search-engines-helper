@@ -1,6 +1,7 @@
 /** @type {string} */
 var xmlTemplate;
 const searchTermsParam = "%s";
+const openSearchTermsParam = "{searchTerms}";
 var browserVersion;
 browser.runtime
   .getBrowserInfo()
@@ -24,7 +25,7 @@ function addSearchEngine(
       error: errorCallback,
     });
   }
-  searchURL = searchURL.replace(searchTermsParam, "{searchTerms}");
+  searchURL = searchURL.replace(searchTermsParam, openSearchTermsParam);
   let newSearchEngineXML = xmlTemplate
     .replace("{ShortName}", engineName)
     .replace("{Description}", engineName)
@@ -150,7 +151,7 @@ function parseBrowserEngines(file, onParse) {
           for (let i = 0; i < urls.length && !searchURL; i++) {
             let e = urls[i];
             if (
-              e.template.indexOf("{searchTerms}") > -1 &&
+              e.template.indexOf(openSearchTermsParam) > -1 &&
               (!e.type || e.type.indexOf("suggestion") == -1)
             ) {
               searchURL = e.template;

@@ -1,3 +1,6 @@
+/**
+ * @implements {Option}
+ */
 class SelectBoxOption {
   /**
    * @param {string} id
@@ -23,6 +26,33 @@ class SelectBoxOption {
 }
 
 /**
+ * @implements {Option}
+ */
+class CheckBoxOption {
+  /**
+   * @param {string} id
+   * @param {boolean} defaultValue
+   */
+  constructor(id, defaultValue) {
+    this.id = id;
+    this.defaultValue = defaultValue;
+  }
+
+  async restore() {
+    const result = await fetchBoolean(this.id, this.defaultValue);
+    /** @type {HTMLInputElement} */
+    const element = query(`#${this.id}`);
+    element.checked = result;
+  }
+
+  async save() {
+    /** @type {HTMLInputElement} */
+    const input = query(`#${this.id}:checked`);
+    storeBoolean(this.id, !!input);
+  }
+}
+
+/**
  * @type {Option[]}
  */
 let options = [];
@@ -33,6 +63,9 @@ let options = [];
  * @returns {Option}
  */
 function buildOption(id, defaultValue) {
+  if (typeof defaultValue == "boolean") {
+    return new CheckBoxOption(id, defaultValue);
+  }
   return new SelectBoxOption(id, defaultValue);
 }
 

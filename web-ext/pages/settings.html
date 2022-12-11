@@ -8,20 +8,41 @@
 
   <body style="display: flex; flex-direction: column; align-items: center">
     <header style="display: flex; align-items: center">
-      <img style="width: 2rem; height: 2rem; margin-right: 1rem" src="../icons/128.png" />
+      <img
+        style="width: 2rem; height: 2rem; margin-right: 1rem"
+        src="../icons/128.png"
+      />
       <h1>Search Engines Helper</h1>
     </header>
-    <form style="padding: 2rem;">
-      <fieldset>
-        <legend>General</legend>
+    <form style="padding: 2rem">
+      <fieldset
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          height: 5rem;
+        "
+      >
+        <legend>Add a new search engine</legend>
         <label
           >Default favicon service
           <select id="faviconService">
-            <option value="">Use Google (https://www.google.com/s2/favicons?domain=example.com)</option>
-            <option value="favicon.ico">Use the site favicon.ico (https://www.example.com/favicon.ico)</option>
-            <option value="faviconkit">Use Favicon Kit (https://api.faviconkit.com/example.com/32)</option>
+            <option value="">
+              Use Google (https://www.google.com/s2/favicons?domain=example.com)
+            </option>
+            <option value="favicon.ico">
+              Use the site favicon.ico (https://www.example.com/favicon.ico)
+            </option>
+            <option value="faviconkit">
+              Use Favicon Kit (https://api.faviconkit.com/example.com/32)
+            </option>
           </select>
         </label>
+        <label
+          >Add input field to test the provided search URL<input
+            type="checkbox"
+            id="testSearchUrl"
+        /></label>
       </fieldset>
       <div style="float: right; padding: 1rem">
         <button type="submit">Save</button>

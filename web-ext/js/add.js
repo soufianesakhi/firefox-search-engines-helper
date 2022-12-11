@@ -113,9 +113,37 @@ function ajaxErrorCallback(jqXHR, textStatus, errorThrown) {
 }
 
 function invalidSearchTermsParam(url) {
-  return url.indexOf(searchTermsParam) < 0 && url.indexOf("{searchTerms}") < 0;
+  return (
+    url.indexOf(searchTermsParam) < 0 && url.indexOf(openSearchTermsParam) < 0
+  );
 }
 
-addEventListener("load", () => {
+/**
+ * @param {string} url
+ * @param {string} searchTerms
+ */
+function testSearchUrl(url, searchTerms) {
+  if (invalidSearchTermsParam(url)) {
+    return;
+  }
+  searchTerms = searchTerms.trim();
+  if (!searchTerms) {
+    return;
+  }
+  const regExp = new RegExp(`(${searchTermsParam}|${openSearchTermsParam})`);
+  const link = url.replace(regExp, encodeURIComponent(searchTerms));
+  window.open(link, "_blank");
+}
+
+addEventListener("load", async () => {
   fetch(serverUrl);
+  const settings = await getSettings();
+  if (settings.testSearchUrl) {
+    document.getElementById("TestSearchURLContainer").style.display = "";
+    document.getElementById("TestSearchURL").onclick = function () {
+      let url = searchURLInput.val().toString();
+      const searchTerms = $("#TestSearchURLTerms").val().toString();
+      testSearchUrl(url, searchTerms);
+    };
+  }
 });

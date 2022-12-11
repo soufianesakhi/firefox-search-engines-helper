@@ -20,9 +20,10 @@ type SearchEngineExport = { [name: string]: SearchEngineDTO };
 
 interface Settings {
   faviconService: "favicon.ico" | "faviconkit" | "";
+  testSearchUrl: boolean;
 }
 
 interface Option {
-  restore();
+  restore(): Promise<any>;
   save(): Promise<any>;
 }

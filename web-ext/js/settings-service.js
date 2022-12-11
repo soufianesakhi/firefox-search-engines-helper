@@ -3,6 +3,7 @@
  */
 const DEFAULT_SETTINGS = {
   faviconService: "",
+  testSearchUrl: false,
 };
 
 async function getSettings() {
@@ -23,4 +24,17 @@ async function fetchObject(id, defaultValue) {
 
 async function storeObject(id, obj) {
   localStorage.setItem(id, obj ? JSON.stringify(obj) : null);
+}
+
+async function fetchBoolean(id, defaultValue) {
+  const value = localStorage.getItem(id);
+  if (value != null) {
+    return value === "true";
+  } else {
+    return defaultValue;
+  }
+}
+
+async function storeBoolean(id, obj) {
+  localStorage.setItem(id, "" + obj);
 }
