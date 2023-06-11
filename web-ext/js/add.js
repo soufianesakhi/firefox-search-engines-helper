@@ -146,4 +146,10 @@ addEventListener("load", async () => {
       testSearchUrl(url, searchTerms);
     };
   }
+
+  const url = new URL(document.URL);
+  if (url.searchParams.has("searchURL")) {
+    searchURLInput.val(url.searchParams.get("searchURL"));
+    searchURLInput.trigger("input");
+  }
 });
