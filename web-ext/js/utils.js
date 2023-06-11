@@ -134,46 +134,48 @@ function parseBrowserEngines(file, onParse) {
   readMozlz4File(file, (json) => {
     try {
       let browserEnginesData = JSON.parse(json);
-      /** @type {any[]} */
+      /** @type {Array} */
       let browserEngines = browserEnginesData["engines"];
       /** @type {SearchEngineExport} */
       let searchEngines = {};
       browserEngines
-        .filter((engine) => engine["_urls"] && !engine["_isBuiltin"])
+        .filter(
+          (engine) =>
+            engine["_urls"] &&
+            !engine["_isBuiltin"] &&
+            !engine["_isAppProvided"]
+        )
         .forEach((engine) => {
           let name = engine["_name"];
           let iconURL = engine["_iconURL"];
           let keyword = engine["_metaData"].alias || undefined;
-          /** @type {string} */
-          let searchURL = null;
-          /** @type {any[]} */
-          let urls = engine["_urls"];
-          for (let i = 0; i < urls.length && !searchURL; i++) {
-            let e = urls[i];
-            if (
-              e.template.indexOf(openSearchTermsParam) > -1 &&
-              (!e.type || e.type.indexOf("suggestion") == -1)
-            ) {
-              searchURL = e.template;
-              /** @type {any[]} */
-              let params = e.params;
-              if (params.length > 0) {
-                searchURL += "?";
-                params.forEach((param) => {
-                  searchURL += param.name + "=" + param.value + "&";
-                });
-                searchURL = searchURL.substr(0, searchURL.length - 1);
-              }
-            }
+          let searchURL = "";
+          /** @type {Array} */
+          const urls = engine["_urls"];
+          let url = urls.find((url) => url.rels.includes("results"));
+          if (!url) {
+            url = urls.find((url) => url.rels.length == 0);
+          }
+          if (!url) {
+            url = urls.shift();
+          }
+          searchURL = url.template;
+          /** @type {Array} */
+          let params = url.params;
+          if (params.length > 0) {
+            const query = params
+              .map((param) => `${param.name}=${param.value}`)
+              .join("&");
+            searchURL = `${searchURL}?${query}`;
           }
           if (!searchURL) {
             return;
           }
           searchURL = searchURL.replace(/\{searchTerms\}/g, searchTermsParam);
           searchEngines[name] = {
-            searchURL: searchURL,
-            iconURL: iconURL,
-            keyword: keyword,
+            searchURL,
+            iconURL,
+            keyword,
           };
         });
       onParse(searchEngines);

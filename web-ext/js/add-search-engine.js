@@ -4,6 +4,8 @@ const opensearch_xml_mime_type = "application/opensearchdescription+xml";
  * @param  {SearchEngineDefinition} definition
  */
 function appendSearchEngineLinks(definition) {
+  document.title = definition.title;
+
   const iconLink = document.createElement("link");
   iconLink.rel = "icon";
   iconLink.href = definition.imageUrl;
