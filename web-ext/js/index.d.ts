@@ -7,11 +7,13 @@ interface SearchEngineDefinition {
 interface SearchEngine {
   searchName: string;
   searchURL: string;
+  suggestionsURL?: string;
   iconURL: string;
 }
 
 interface SearchEngineDTO {
   searchURL: string;
+  suggestionsURL?: string;
   iconURL: string;
   keyword: string;
 }

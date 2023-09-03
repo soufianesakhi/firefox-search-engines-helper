@@ -2,18 +2,15 @@
 var xmlTemplate;
 const searchTermsParam = "%s";
 const openSearchTermsParam = "{searchTerms}";
-var browserVersion;
-browser.runtime
-  .getBrowserInfo()
-  .then((infos) => (browserVersion = infos.version.split(".")[0]));
 
-function addSearchEngine(
+function addSearchEngine({
   searchURL,
   engineName,
   imageURL,
-  successCallback,
-  errorCallback
-) {
+  suggestionsURL = null,
+  successCallback = null,
+  errorCallback = null,
+}) {
   if (!xmlTemplate) {
     $.ajax({
       url: browser.extension.getURL("search-template.xml"),
@@ -25,24 +22,30 @@ function addSearchEngine(
       error: errorCallback,
     });
   }
-  searchURL = searchURL.replace(searchTermsParam, openSearchTermsParam);
+  searchURL = searchURL.replaceAll(searchTermsParam, openSearchTermsParam);
   let newSearchEngineXML = xmlTemplate
     .replace("{ShortName}", engineName)
     .replace("{Description}", engineName)
     .replace("{SearchURL}", htmlEscape(searchURL))
     .replace("{ImageURL}", htmlEscape(imageURL));
-
-  const url = getUrl(newSearchEngineXML);
-  if (browserVersion > 77) {
-    addSearchEngineAsAction({
-      opensearchUrl: url,
-      imageUrl: imageURL,
-      title: engineName,
-    });
-  } else {
-    // @ts-ignore
-    window.external.AddSearchProvider(url);
+  if (suggestionsURL) {
+    suggestionsURL = suggestionsURL.replaceAll(
+      searchTermsParam,
+      openSearchTermsParam
+    );
+    newSearchEngineXML = newSearchEngineXML.replace(
+      "<Image",
+      `<Url type="application/x-suggestions+json" template="${htmlEscape(
+        suggestionsURL
+      )}"/>\n  <Image`
+    );
   }
+  const url = getUrl(newSearchEngineXML);
+  addSearchEngineAsAction({
+    opensearchUrl: url,
+    imageUrl: imageURL,
+    title: engineName,
+  });
   if (successCallback) {
     successCallback();
   }
@@ -160,6 +163,9 @@ function parseBrowserEngines(file, onParse) {
             url = urls.shift();
           }
           searchURL = url.template;
+          let suggestionsURL = urls.find(
+            (url) => url.type == "application/x-suggestions+json"
+          )?.template;
           /** @type {Array} */
           let params = url.params;
           if (params.length > 0) {
@@ -171,11 +177,19 @@ function parseBrowserEngines(file, onParse) {
           if (!searchURL) {
             return;
           }
-          searchURL = searchURL.replace(/\{searchTerms\}/g, searchTermsParam);
+          searchURL = searchURL.replaceAll(
+            /\{searchTerms\}/g,
+            searchTermsParam
+          );
+          suggestionsURL = suggestionsURL?.replaceAll(
+            /\{searchTerms\}/g,
+            searchTermsParam
+          );
           searchEngines[name] = {
             searchURL,
             iconURL,
             keyword,
+            suggestionsURL,
           };
         });
       onParse(searchEngines);

@@ -42,7 +42,7 @@ function submitImportSearchEngines() {
           if (engine.keyword) {
             metaData.alias = engine.keyword;
           }
-          browserEngines.push({
+          const browserEngine = {
             __searchForm: "",
             _isBuiltin: false,
             _iconURL: engine.iconURL,
@@ -60,7 +60,17 @@ function submitImportSearchEngines() {
             ],
             description: searchName,
             queryCharset: "UTF-8",
-          });
+          };
+          if (engine.suggestionsURL) {
+            browserEngine._urls.push({
+              params: [],
+              rels: [],
+              resultDomain: "",
+              template: engine.suggestionsURL.replace(/%s/g, "{searchTerms}"),
+              type: "application/x-suggestions+json",
+            });
+          }
+          browserEngines.push(browserEngine);
         });
         if (searchNames.length > 0) {
           exportMozlz4(JSON.stringify(browserEnginesData));

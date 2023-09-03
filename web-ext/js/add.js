@@ -1,4 +1,5 @@
 var searchURLInput = $("#AddEngineSearchURL");
+var suggestionsURLInput = $("#AddEngineSuggestionsURL");
 var engineNameInput = $("#AddEngineName");
 var iconURLInput = $("#AddEngineIconURL");
 var engineIconDiv = $("#EngineIcon");
@@ -54,6 +55,7 @@ function refreshEngineIcon() {
 function submitSearchEngine() {
   let engineName = engineNameInput.val().toString().trim();
   let searchURL = searchURLInput.val().toString().trim();
+  let suggestionsURL = suggestionsURLInput.val().toString().trim();
   let imageURL = iconURLInput.val().toString().trim();
   if (searchURL.length == 0) {
     notify("The search URL cannot be empty");
@@ -71,13 +73,14 @@ function submitSearchEngine() {
     notify(`"${searchTermsParam}" missing from the search URL`);
     return;
   }
-  addSearchEngine(
+  addSearchEngine({
     searchURL,
+    suggestionsURL,
     engineName,
     imageURL,
-    postSuccess,
-    ajaxErrorCallback
-  );
+    successCallback,
+    errorCallback,
+  });
 }
 
 function loadImage(ev) {
@@ -94,9 +97,10 @@ function loadImage(ev) {
   reader.readAsDataURL(file);
 }
 
-function postSuccess() {
+function successCallback() {
   engineNameInput.val("");
   searchURLInput.val("");
+  suggestionsURLInput.val("");
   iconURLInput.val("");
   loadImageInput.val("");
   engineIconDiv.empty();
@@ -107,7 +111,7 @@ function postSuccess() {
  * @param {JQuery.Ajax.ErrorTextStatus} textStatus
  * @param {string} errorThrown
  */
-function ajaxErrorCallback(jqXHR, textStatus, errorThrown) {
+function errorCallback(jqXHR, textStatus, errorThrown) {
   console.log(textStatus + ": " + errorThrown);
   console.error(jqXHR);
 }
@@ -131,7 +135,7 @@ function testSearchUrl(url, searchTerms) {
     return;
   }
   const regExp = new RegExp(`(${searchTermsParam}|${openSearchTermsParam})`);
-  const link = url.replace(regExp, encodeURIComponent(searchTerms));
+  const link = url.replaceAll(regExp, encodeURIComponent(searchTerms));
   window.open(link, "_blank");
 }
 

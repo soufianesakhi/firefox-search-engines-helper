@@ -33,6 +33,7 @@ function submitImportSearchEngines() {
             searchName: name,
             searchURL: importedEngines[name].searchURL,
             iconURL: importedEngines[name].iconURL,
+            suggestionsURL: importedEngines[name].suggestionsURL,
           };
         });
       if (enginesToImport.length > 0) {
@@ -49,11 +50,14 @@ function submitImportSearchEngines() {
  * @param { SearchEngine[] } enginesToImport
  **/
 function importSearchEngines(enginesToImport) {
-  enginesToImport.forEach((searchEngine) => {
-    addSearchEngine(
-      searchEngine.searchURL,
-      searchEngine.searchName,
-      searchEngine.iconURL
-    );
-  });
+  enginesToImport.forEach(
+    ({
+      searchURL,
+      searchName: engineName,
+      iconURL: imageURL,
+      suggestionsURL,
+    }) => {
+      addSearchEngine({ searchURL, suggestionsURL, engineName, imageURL });
+    }
+  );
 }
