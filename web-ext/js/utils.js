@@ -31,13 +31,13 @@ function addSearchEngine({
   if (suggestionsURL) {
     suggestionsURL = suggestionsURL.replaceAll(
       searchTermsParam,
-      openSearchTermsParam
+      openSearchTermsParam,
     );
     newSearchEngineXML = newSearchEngineXML.replace(
       "<Image",
       `<Url type="application/x-suggestions+json" template="${htmlEscape(
-        suggestionsURL
-      )}"/>\n  <Image`
+        suggestionsURL,
+      )}"/>\n  <Image`,
     );
   }
   const url = getUrl(newSearchEngineXML);
@@ -59,10 +59,9 @@ async function addSearchEngineAsAction(definition) {
     url: "/pages/add-search-engine.html",
     active: true,
   });
-  await browser.tabs.executeScript(tab.id, {
-    file: "/js/add-search-engine.js",
-  });
-  browser.tabs.sendMessage(tab.id, definition);
+  setTimeout(() => {
+    browser.tabs.sendMessage(tab.id, definition);
+  }, 100);
 }
 
 const serverUrl = "https://http-request-echo-server.onrender.com/";
@@ -146,7 +145,7 @@ function parseBrowserEngines(file, onParse) {
           (engine) =>
             engine["_urls"] &&
             !engine["_isBuiltin"] &&
-            !engine["_isAppProvided"]
+            !engine["_isAppProvided"],
         )
         .forEach((engine) => {
           let name = engine["_name"];
@@ -164,7 +163,7 @@ function parseBrowserEngines(file, onParse) {
           }
           searchURL = url.template;
           let suggestionsURL = urls.find(
-            (url) => url.type == "application/x-suggestions+json"
+            (url) => url.type == "application/x-suggestions+json",
           )?.template;
           /** @type {Array} */
           let params = url.params;
@@ -179,11 +178,11 @@ function parseBrowserEngines(file, onParse) {
           }
           searchURL = searchURL.replaceAll(
             /\{searchTerms\}/g,
-            searchTermsParam
+            searchTermsParam,
           );
           suggestionsURL = suggestionsURL?.replaceAll(
             /\{searchTerms\}/g,
-            searchTermsParam
+            searchTermsParam,
           );
           searchEngines[name] = {
             searchURL,
