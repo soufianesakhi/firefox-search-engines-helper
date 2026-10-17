@@ -13,7 +13,7 @@ function addSearchEngine({
 }) {
   if (!xmlTemplate) {
     $.ajax({
-      url: browser.extension.getURL("search-template.xml"),
+      url: browser.runtime.getURL("search-template.xml"),
       dataType: "text",
       async: false,
       success: (result) => {
@@ -85,6 +85,24 @@ async function getFaviconIcoUrl(url) {
   }
 }
 
+/**
+ * @param {string} content
+ * @param {string} filename
+ */
+function exportFile(content, filename) {
+  var textToSaveAsBlob = new Blob([content], { type: "application/json" });
+  var textToSaveAsURL = URL.createObjectURL(textToSaveAsBlob);
+  var downloadLink = document.createElement("a");
+  downloadLink.download = filename ? filename : "export.json";
+  downloadLink.href = textToSaveAsURL;
+  downloadLink.onclick = function () {
+    $(downloadLink).remove();
+  };
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+}
+
 function readMozlz4File(file, onRead, onError) {
   let reader = new FileReader();
 
@@ -132,7 +150,13 @@ function exportMozlz4(data) {
  * @param { Blob } file
  * @param { (searchEngines: SearchEngineExport) => void } onParse
  **/
-function parseBrowserEngines(file, onParse) {
+async function parseBrowserEngines(file, onParse) {
+  const searchEngines = await browser.search.get();
+  const searchEnginesIcons = {};
+  searchEngines.forEach(
+    (searchEngine) =>
+      (searchEnginesIcons[searchEngine.name] = searchEngine.favIconUrl),
+  );
   readMozlz4File(file, (json) => {
     try {
       let browserEnginesData = JSON.parse(json);
@@ -149,7 +173,7 @@ function parseBrowserEngines(file, onParse) {
         )
         .forEach((engine) => {
           let name = engine["_name"];
-          let iconURL = engine["_iconURL"];
+          let iconURL = searchEnginesIcons[name];
           let keyword = engine["_metaData"].alias || undefined;
           let searchURL = "";
           /** @type {Array} */
@@ -267,4 +291,33 @@ function displayLoader() {
 
 function hideLoader() {
   document.getElementById("loader-container")?.remove();
+}
+
+/**
+ * @param {string} dataUrl 
+ * @returns {Promise<{
+        width: number,
+        height: number,
+      }>}
+ */
+async function getPixelCount(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+
+      resolve({
+        width: width,
+        height: height,
+      });
+    };
+
+    img.onerror = (error) => {
+      reject(new Error("Failed to load image from data URL."));
+    };
+
+    img.src = dataUrl;
+  });
 }

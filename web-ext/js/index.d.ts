@@ -21,7 +21,7 @@ interface SearchEngineDTO {
 type SearchEngineExport = { [name: string]: SearchEngineDTO };
 
 interface Settings {
-  faviconService: "favicon.ico" | "faviconkit" | "";
+  faviconService: "favicon.ico" | "";
   testSearchUrl: boolean;
 }
 

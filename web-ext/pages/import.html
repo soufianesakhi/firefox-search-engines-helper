@@ -1,5 +1,5 @@
 <!-- Import search engines from a json file -->
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -8,29 +8,9 @@
   <body>
     <div class="content-panel">
       <div>
-        1. Select the exported json file:
+        Select the exported json file:
         <input id="importJsonInput" type="file" accept=".json" />
       </div>
-      <div>
-        2. Select the search.json.mozlz4 file (*):
-        <input id="mozlz4SearchInput" type="file" accept=".json.mozlz4" />
-      </div>
-      <div>
-        3.
-        <input id="importEngines" type="button" value="Import" />
-      </div>
-      <br />
-      <span class="footnote">
-        (*) Used to import only added engines
-        <br />
-        (*) Due to Firefox limitations, the "search.json.mozlz4" file must be
-        manually selected from the profile folder
-        <a
-          href="http://kb.mozillazine.org/Profile_folder_-_Firefox#Navigating_to_the_profile_folder"
-          target="_blank"
-          >How to locate the profile folder</a
-        >
-      </span>
     </div>
 
     <script src="../js/jquery.min.js"></script>

@@ -29,9 +29,6 @@ searchURLInput[0].oninput = async (ev) => {
           hideLoader();
         }
         break;
-      case "faviconkit":
-        iconUrl = `https://api.faviconkit.com/${hostname}/32`;
-        break;
       default:
         iconUrl = `https://www.google.com/s2/favicons?domain=${hostname}`;
         break;
