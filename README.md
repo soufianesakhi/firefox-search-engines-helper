@@ -71,3 +71,8 @@ From settings page, you can:
 - Optionally display an input that can be used to test the search url with the provided search terms
 
 ![settings](https://raw.githubusercontent.com/soufianesakhi/firefox-search-engines-helper/master/screenshots/settings.PNG)
+
+## Debugging
+
+- clone repository: https://github.com/soufianesakhi/firefox-search-engines-helper
+- import web-ext folder using about:debugging

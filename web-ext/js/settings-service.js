@@ -4,6 +4,7 @@
 const DEFAULT_SETTINGS = {
   faviconService: "",
   testSearchUrl: false,
+  displayOptional: false,
 };
 
 async function getSettings() {
@@ -12,7 +13,7 @@ async function getSettings() {
     Object.keys(DEFAULT_SETTINGS).map(async (key) => {
       const value = await fetchObject(key, DEFAULT_SETTINGS[key]);
       settings[key] = value;
-    })
+    }),
   );
   return settings;
 }

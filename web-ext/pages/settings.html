@@ -1,50 +1,55 @@
 <!doctype html>
 
-<html>
+<html data-theme="light">
   <head>
     <meta charset="utf-8" />
     <title>Settings - Search Engines Helper</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
+    />
+    <link rel="icon" href="../icons/128.png" type="image/png" />
   </head>
 
-  <body style="display: flex; flex-direction: column; align-items: center">
-    <header style="display: flex; align-items: center">
-      <img
-        style="width: 2rem; height: 2rem; margin-right: 1rem"
-        src="../icons/128.png"
-      />
-      <h1>Search Engines Helper</h1>
-    </header>
-    <form style="padding: 2rem">
-      <fieldset
-        style="
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-          height: 5rem;
-        "
-      >
-        <legend>Add a new search engine</legend>
-        <label
-          >Default favicon service
-          <select id="faviconService">
-            <option value="">
-              Use Google (https://www.google.com/s2/favicons?domain=example.com)
-            </option>
-            <option value="favicon.ico">
-              Use the site favicon.ico (https://www.example.com/favicon.ico)
-            </option>
-          </select>
-        </label>
-        <label
-          >Add input field to test the provided search URL<input
-            type="checkbox"
-            id="testSearchUrl"
-        /></label>
-      </fieldset>
-      <div style="float: right; padding: 1rem">
-        <button type="submit">Save</button>
-      </div>
-    </form>
+  <body>
+    <div style="max-width: 800px">
+      <header style="display: flex; align-items: center">
+        <img
+          style="width: 2rem; height: 2rem; margin-right: 1rem"
+          src="../icons/128.png"
+        />
+        <h1>Search Engines Helper Settings</h1>
+      </header>
+      <main>
+        <form>
+          <label
+            >Default favicon service
+            <select id="faviconService">
+              <option value="">
+                Use Google
+                (https://www.google.com/s2/favicons?domain=example.com)
+              </option>
+              <option value="favicon.ico">
+                Use the site favicon.ico (https://www.example.com/favicon.ico)
+              </option>
+            </select>
+          </label>
+          <label>
+            <input type="checkbox" id="testSearchUrl" />
+            Add input field to test the provided search URL
+          </label>
+          <label>
+            <input type="checkbox" id="displayOptional" />
+            Display optional settings when adding new search engine (closed if
+            not enabled)
+          </label>
+          <div style="float: right">
+            <button type="submit">Save</button>
+          </div>
+        </form>
+      </main>
+    </div>
 
     <script src="../js/jquery.min.js"></script>
     <script src="../js/settings-service.js"></script>

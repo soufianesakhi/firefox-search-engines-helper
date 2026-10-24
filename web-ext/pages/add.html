@@ -1,59 +1,100 @@
 <!-- Export all search engines to json file -->
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../style.css" />
     <title>Add a new search engine</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
+    />
+    <link rel="icon" href="../icons/128.png" type="image/png" />
   </head>
   <body>
-    <div class="content-panel">
-      <form>
-        <div>
-          <label>Search URL: "%s" is substituted with the search terms</label>
-          <input id="AddEngineSearchURL" type="text" style="width: 100%" />
-        </div>
-        <div>
-          <label
-            >(Optional) Suggestions URL: "%s" is substituted with the search
-            terms</label
-          >
-          <input id="AddEngineSuggestionsURL" type="text" style="width: 100%" />
-        </div>
-        <div id="TestSearchURLContainer" style="display: none">
-          <label>Search terms</label>
-          <input id="TestSearchURLTerms" type="text" style="width: 100%" />
-          <input type="button" id="TestSearchURL" value="Test" />
-        </div>
-        <div>
-          <label>Search name</label>
-          <input id="AddEngineName" type="text" style="width: 40%" />
-        </div>
-        <div>
-          <label
-            >Icon URL (<a
-              href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs"
-              target="_blank"
-              >Data URLs</a
+    <div style="max-width: 600px">
+      <header style="display: flex; align-items: center">
+        <img
+          style="width: 2rem; height: 2rem; margin-right: 1rem"
+          src="../icons/128.png"
+        />
+        <h1>Add a new search engine</h1>
+      </header>
+      <main>
+        <form>
+          <div>
+            <label>Search URL: "%s" is substituted with the search terms</label>
+            <input id="AddEngineSearchURL" type="text" />
+          </div>
+          <div id="TestSearchURLContainer" style="display: none">
+            <label>Search terms</label>
+            <div style="display: flex; align-items: start">
+              <input id="TestSearchURLTerms" type="text" />
+              <button class="secondary-btn" id="TestSearchURL">Test</button>
+            </div>
+          </div>
+          <div>
+            <label>Search name</label>
+            <input id="AddEngineName" type="text" style="width: 40%" />
+          </div>
+          <div>
+            <label
+              >Icon URL (<a
+                href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs"
+                target="_blank"
+                >Data URLs</a
+              >
+              supported):</label
             >
-            supported):</label
-          >
-          <div style="display: flex">
-            <input id="AddEngineIconURL" type="text" style="flex: 2" />
+            <div style="display: flex; align-items: center">
+              <input
+                id="AddEngineIconURL"
+                style="margin-bottom: 0"
+                type="text"
+              />
+              <div id="EngineIcon">
+                <img
+                  src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"
+                />
+              </div>
+            </div>
+            <small style="margin-bottom: 0"
+              >(must not be larger than 10KB)</small
+            >
             <input type="file" id="loadImage" />
           </div>
-        </div>
-        <div id="EngineIcon">
-          <img
-            src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"
-          />
-        </div>
-        <div>
+
+          <details id="displayOptionalSettings">
+            <summary>Optional settings</summary>
+            <div>
+              <label
+                >Suggestions URL: "%s" is substituted with the search
+                terms</label
+              >
+              <input id="AddEngineSuggestionsURL" type="text" />
+            </div>
+          </details>
+
           <input type="button" id="addSearchEngine" value="Add search engine" />
-        </div>
-      </form>
+        </form>
+      </main>
     </div>
 
+    <style>
+      body main input:not([type="checkbox"]),
+      body main .secondary-btn {
+        height: var(--form-element-height);
+      }
+
+      body main input,
+      body main .secondary-btn {
+        --pico-form-element-spacing-vertical: 0.5rem;
+      }
+
+      body main .secondary-btn {
+        margin-left: 5px;
+      }
+    </style>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/settings-service.js"></script>

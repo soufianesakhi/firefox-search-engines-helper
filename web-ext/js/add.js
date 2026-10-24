@@ -10,6 +10,7 @@ loadImageInput.change(loadImage);
 searchURLInput[0].oninput = async (ev) => {
   let iconURL = iconURLInput.val().toString();
   if (iconURL.length > 0) {
+    refreshEngineIcon();
     return;
   }
   let url = searchURLInput.val().toString();
@@ -46,6 +47,7 @@ iconURLInput[0].oninput = refreshEngineIcon;
 function refreshEngineIcon() {
   let img = document.createElement("img");
   img.src = iconURLInput.val().toString();
+  img.style = "width: var(--form-element-height); margin-left: 5px;";
   engineIconDiv.empty().append(img);
 }
 
@@ -131,9 +133,19 @@ function testSearchUrl(url, searchTerms) {
   if (!searchTerms) {
     return;
   }
-  const regExp = new RegExp(`(${searchTermsParam}|${openSearchTermsParam})`);
+  const regExp = new RegExp(
+    `(${searchTermsParam}|${openSearchTermsParam})`,
+    "g",
+  );
   const link = url.replaceAll(regExp, encodeURIComponent(searchTerms));
   window.open(link, "_blank");
+}
+
+function submitTestSearchURL(event) {
+  event.preventDefault();
+  let url = searchURLInput.val().toString();
+  const searchTerms = $("#TestSearchURLTerms").val().toString();
+  testSearchUrl(url, searchTerms);
 }
 
 addEventListener("load", async () => {
@@ -141,11 +153,14 @@ addEventListener("load", async () => {
   const settings = await getSettings();
   if (settings.testSearchUrl) {
     document.getElementById("TestSearchURLContainer").style.display = "";
-    document.getElementById("TestSearchURL").onclick = function () {
-      let url = searchURLInput.val().toString();
-      const searchTerms = $("#TestSearchURLTerms").val().toString();
-      testSearchUrl(url, searchTerms);
+    document.getElementById("TestSearchURL").onclick = submitTestSearchURL;
+    document.getElementById("TestSearchURLTerms").onkeydown = (event) => {
+      if (event.key === "Enter") submitTestSearchURL(event);
     };
+  }
+
+  if (settings.displayOptional) {
+    document.getElementById("displayOptionalSettings").setAttribute("open", "");
   }
 
   const url = new URL(document.URL);

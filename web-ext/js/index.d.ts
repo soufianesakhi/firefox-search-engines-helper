@@ -23,6 +23,7 @@ type SearchEngineExport = { [name: string]: SearchEngineDTO };
 interface Settings {
   faviconService: "favicon.ico" | "";
   testSearchUrl: boolean;
+  displayOptional: boolean;
 }
 
 interface Option {
