@@ -4,6 +4,7 @@ var engineNameInput = $("#AddEngineName");
 var iconURLInput = $("#AddEngineIconURL");
 var engineIconDiv = $("#EngineIcon");
 var loadImageInput = $("#loadImage");
+var keywordInput = $("#Keyword");
 $("#addSearchEngine").click(submitSearchEngine);
 loadImageInput.change(loadImage);
 
@@ -55,6 +56,7 @@ function submitSearchEngine() {
   let engineName = engineNameInput.val().toString().trim();
   let searchURL = searchURLInput.val().toString().trim();
   let suggestionsURL = suggestionsURLInput.val().toString().trim();
+  let keyword = keywordInput.val().toString().trim();
   let imageURL = iconURLInput.val().toString().trim();
   if (searchURL.length == 0) {
     notify("The search URL cannot be empty");
@@ -77,6 +79,7 @@ function submitSearchEngine() {
     suggestionsURL,
     engineName,
     imageURL,
+    keyword,
     successCallback,
     errorCallback,
   });

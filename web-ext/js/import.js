@@ -18,14 +18,21 @@
     parseJsonFile(importJsonInput, (importedEngines) => {
       const enginesToImport = Object.keys(importedEngines)
         .filter((name) => existingSearchEngines.indexOf(name) == -1)
-        .map((name) => {
-          return {
-            searchName: name,
-            searchURL: importedEngines[name].searchURL,
-            iconURL: importedEngines[name].iconURL,
-            suggestionsURL: importedEngines[name].suggestionsURL,
-          };
-        });
+        .map(
+          /**
+           * @param {string} name
+           * @returns {SearchEngine}
+           */
+          (name) => {
+            return {
+              searchName: name,
+              searchURL: importedEngines[name].searchURL,
+              iconURL: importedEngines[name].iconURL,
+              suggestionsURL: importedEngines[name].suggestionsURL,
+              keyword: importedEngines[name].keyword,
+            };
+          },
+        );
       if (enginesToImport.length > 0) {
         importSearchEngines(enginesToImport);
       } else {
@@ -45,8 +52,15 @@
         searchName: engineName,
         iconURL: imageURL,
         suggestionsURL,
+        keyword,
       }) => {
-        addSearchEngine({ searchURL, suggestionsURL, engineName, imageURL });
+        addSearchEngine({
+          searchURL,
+          suggestionsURL,
+          engineName,
+          imageURL,
+          keyword,
+        });
       },
     );
   }

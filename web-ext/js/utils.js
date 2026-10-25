@@ -8,6 +8,7 @@ function addSearchEngine({
   engineName,
   imageURL,
   suggestionsURL = null,
+  keyword,
   successCallback = null,
   errorCallback = null,
 }) {
@@ -38,6 +39,12 @@ function addSearchEngine({
       `<Url type="application/x-suggestions+json" template="${htmlEscape(
         suggestionsURL,
       )}"/>\n  <Image`,
+    );
+  }
+  if (keyword) {
+    newSearchEngineXML = newSearchEngineXML.replace(
+      "<Image",
+      `<Tags>${keyword}</Tags>\n  <Image`,
     );
   }
   const url = getUrl(newSearchEngineXML);
@@ -152,10 +159,10 @@ function exportMozlz4(data) {
  **/
 async function parseBrowserEngines(file, onParse) {
   const searchEngines = await browser.search.get();
-  const searchEnginesIcons = {};
+  /** @type {Record<String, browser.search.SearchEngine>} */
+  const browserSearchEngines = {};
   searchEngines.forEach(
-    (searchEngine) =>
-      (searchEnginesIcons[searchEngine.name] = searchEngine.favIconUrl),
+    (searchEngine) => (browserSearchEngines[searchEngine.name] = searchEngine),
   );
   readMozlz4File(file, (json) => {
     try {
@@ -173,8 +180,8 @@ async function parseBrowserEngines(file, onParse) {
         )
         .forEach((engine) => {
           let name = engine["_name"];
-          let iconURL = searchEnginesIcons[name];
-          let keyword = engine["_metaData"].alias || undefined;
+          let iconURL = browserSearchEngines[name].favIconUrl;
+          let keyword = browserSearchEngines[name].alias;
           let searchURL = "";
           /** @type {Array} */
           const urls = engine["_urls"];

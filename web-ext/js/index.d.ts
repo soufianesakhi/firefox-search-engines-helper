@@ -9,6 +9,7 @@ interface SearchEngine {
   searchURL: string;
   suggestionsURL?: string;
   iconURL: string;
+  keyword: string;
 }
 
 interface SearchEngineDTO {
